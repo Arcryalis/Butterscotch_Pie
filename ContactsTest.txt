@@ -1,0 +1,8 @@
+Sev,Tim
+Sev,John
+John,Jesus
+Moses,Abraham
+God,Prometheus
+Michal,Anna
+Arthur Dent, Gorge
+Jesus,Sev
