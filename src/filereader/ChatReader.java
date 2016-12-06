@@ -1,9 +1,13 @@
 package filereader;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
+import chat.Message;
+import chat.MediaMessage;
+import chat.TextMessage;
 
 /**
  * ChatReader.java
@@ -50,15 +54,19 @@ public class ChatReader extends FileReader {
 	 * @return A list of all chat messages in the chat file
 	 * @throws FileNotFoundException
 	 */
-	public LinkedList<String> readAll() throws FileNotFoundException {
+	public LinkedList<Message> readAll() throws FileNotFoundException {
 
-		LinkedList<String> chatList = new LinkedList<String>();
+		LinkedList<Message> chatList = new LinkedList<Message>();
 		
 		try {	
 			Scanner fileIn = openRead();
-			
+
 			while(fileIn.hasNextLine()) {
-				chatList.add(readLine(fileIn));
+				try {
+					chatList.add(readLine(fileIn));
+				} catch (Exception e) {
+					
+				}
 			}
 		} catch (FileNotFoundException e) {
 			throw e;
@@ -98,21 +106,43 @@ public class ChatReader extends FileReader {
 	 * @param fileIn The current file scanner being read from
 	 * @return The message on the chat line
 	 */
-	private String readLine(Scanner fileIn) {
+	private Message readLine(Scanner fileIn) throws Exception {
+		
+		Message message = new TextMessage (EMPTY, EMPTY);
+		
 		String line = fileIn.nextLine();
 		
         Scanner lineIn = new Scanner(line);
         lineIn.useDelimiter(DELIMITER);
         
-		//String msgNum = lineIn.next();
-		//String msgType = lineIn.next();
-		String content = lineIn.next();
-		//String timeSent = lineIn.next();
-		//String username = lineIn.next();      
-        
-        lineIn.close();
-        
-        return content;	 
+		String msgNum = lineIn.next();
+		String msgType = lineIn.next();
+		
+		String sender = lineIn.next(); 
+		String timeSent = lineIn.next();
+		
+		//Text message
+		if (msgType != TEXT) {
+
+			String description = lineIn.next();
+			String filepath = lineIn.next();
+			File media = new File(filepath); 
+			try {
+				message = new MediaMessage (media, description, sender);
+			} catch (Exception e) {
+				throw e;
+			} finally {
+				lineIn.close();
+			}
+			
+		//Media message
+		} else {
+			String content = lineIn.next();
+			message = new TextMessage (content, sender);
+	        lineIn.close();
+		}
+		
+        return message ;	 
 	}
 	
 	
@@ -146,5 +176,7 @@ public class ChatReader extends FileReader {
 			throw e;
 		}
 	}
+	
+	private String TEXT = "Text";
 	
 }

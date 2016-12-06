@@ -110,7 +110,7 @@ public class ContactsReader extends FileReader{
 			
 		} catch (FileNotFoundException e) {
 			//throw e;
-		} catch (IOException e) {
+		} catch (IOException e) {	
 			//throw e;
 		}
 	}
