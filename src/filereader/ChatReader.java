@@ -74,13 +74,14 @@ public class ChatReader extends FileReader {
 		return chatList;
 	}
 	
+	/*
 	/**
 	 * Reads an input number of the  newest messages in the chat file.
 	 * @param numRead The number of messages to read
 	 * @return A list of the last numRead messages in the chat file
 	 * @throws FileNotFoundException
-	 */
-	public LinkedList<String> readLastNum(int numRead) throws FileNotFoundException {
+	 *
+	public LinkedList<Message> readLastNum(int numRead) throws FileNotFoundException {
 
 		LinkedList<String> chatList = new LinkedList<String>();
 		
@@ -90,16 +91,19 @@ public class ChatReader extends FileReader {
 			Scanner fileIn = openRead();
 			
 			while(fileIn.hasNextLine()) {
-				/*if (chat.getMsgNum() == numReadFrom) {
+				
+				Message message = readLine(fileIn);
+				
+				if (message.getMsgNum() == numReadFrom) {
 									
-				}*/
+				}
 			}
 		} catch (FileNotFoundException e) {
 			throw e;
 		} 
 		return chatList;
 	}
-	
+	*/
 	
 	/**
 	 * Reads the current line of the chat file.
