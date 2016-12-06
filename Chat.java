@@ -1,10 +1,17 @@
-package Chat;
+package chat;
 
 import java.io.File;
 import java.util.LinkedList;
-
+/**
+ * This is the main class of CHat that contains the main logit of chat and contains
+ * any interactation that the GUI would do with Chat
+ * @author Osian 
+ * @date 06 12 16
+ * @version 0.6
+ *
+ */
 public class Chat {
-	private File m_chatLocation;
+	private String m_chatLocation;
 	private boolean m_canUsersTalk;
 	private LinkedList<Message> m_listOfMessages = new LinkedList<Message>();
 	private int m_messageNumber = 0; // the message number
@@ -19,7 +26,7 @@ public class Chat {
 	 * This is the location of the chat
 	 * @returnlocation oif the chat
 	 */
-	public File getChatLocation() {
+	public String getChatLocation() {
 		return m_chatLocation;
 	}
 
@@ -66,6 +73,12 @@ public class Chat {
 		this.m_messageNumber ++;
 		
 	}
+	private void newTextMessage(String message, String sender, String time){
+		Message load =  new TextMessage(message, sender, time);
+		this.m_listOfMessages.add(load);
+		this.m_messageNumber ++;
+		
+	}
 	/**
 	 * This adds a new messsage to the linked list 
 	 * No safety checks are done here so if a virus is passed it will be displayed to
@@ -86,7 +99,28 @@ public class Chat {
 			
 		}
 		this.m_messageNumber ++;
-		
+	}
+	
+	/**
+	 * This adds a new media message to the linked list. This will also add time stamp to
+	 *  database and is intended to be use to load old data into the database
+	 * @param message The message contnet as a file
+	 * @param discription The description of the message  (limited to a set 
+	 * amount of characters @See MediaMessage
+	 * @param sender The person who has sent the object
+	 * @param Time The time of the message as a String 
+	 * @throws Exception Exception If message is too long Excpetion is thrown  - @See MediaMessage
+	 */
+	private void newMediaMessage(File message, String discription, String sender,String Time) throws Exception {
+		try {
+			Message load =  new MediaMessage(message,discription,sender,Time);
+			this.m_listOfMessages.add(load);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("Lenght of the description is too long");
+			
+		}
+		this.m_messageNumber ++;
 	}
 	/**
 	 * THis gets the message of a certain index
