@@ -1,4 +1,4 @@
-package Chat;
+package chat;
 
 import java.io.File;
 
@@ -35,9 +35,19 @@ public class MediaMessage extends Message {
 		//
 	}
 	
+	public MediaMessage(File message, String discription, String sender, String time) throws Exception {
+		super(sender, time);
+		this.m_file = message;
+		if ((discription.length()) >= this.DESCPITION_LENGHT){
+			throw new Exception("Lenght of the description is too long"); 
+		}
+		this.m_Description = discription;
+		//
+	}
+
 	/**
 	 * Them message file
-	 * @return message file 
+	 * @return message files 
 	 */
 	public File getMessage() {
 		return m_file;
@@ -61,7 +71,7 @@ public class MediaMessage extends Message {
 	@Override
 	public void display() {
 		System.out.println(m_Description);
-		System.out.println(m_file);
+		System.out.println(m_file.toString());
 		
 	}
 	
