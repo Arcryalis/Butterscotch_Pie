@@ -11,7 +11,6 @@ import login.Account;
 
 public class AccountReaderTests {
 	
-	private static final String FILEPATH = "AccountsTest.txt";
 	private static final Account FIRST_ACCOUNT = new Account("Sev", "p1", "f.name 1", "s.name 1", "1792");
 
 	/**
