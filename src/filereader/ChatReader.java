@@ -1,5 +1,10 @@
 package filereader;
 
+/**	
+ * ChatReader.java
+ * @author Hywel Williams
+ */
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,13 +13,11 @@ import java.util.LinkedList;
 import chat.Message;
 import chat.MediaMessage;
 import chat.TextMessage;
+import java.util.Scanner;
 
 /**
- * ChatReader.java
- * @author Hywel Williams
+ * A ChatReader handles interactions with a chat file.
  */
-
-import java.util.Scanner;
 
 public class ChatReader extends FileReader {
 
@@ -28,62 +31,16 @@ public class ChatReader extends FileReader {
 		
 	}
 	
-	//Other methods
-	/**
-	 * @return The newest msgNum in the chat file
-	 */
-	public int getNewestMsgNum() {
-		int newMsgNum = 0;
-		
-		try {	
-			Scanner fileIn = openRead();
-			
-			while(fileIn.hasNextLine()) {
-				//newMsgNum = readLine(fileIn);
-			}
-			
-		} catch (FileNotFoundException e) {
-			//throw e;
-		} 
-		return newMsgNum;
-		
-	}
-	
-	/**
-	 * Reads all chat messages from the chat file.
-	 * @return A list of all chat messages in the chat file
-	 * @throws FileNotFoundException
-	 */
-	public LinkedList<Message> readAll() throws FileNotFoundException {
-
-		LinkedList<Message> chatList = new LinkedList<Message>();
-		
-		try {	
-			Scanner fileIn = openRead();
-
-			while(fileIn.hasNextLine()) {
-				try {
-					chatList.add(readLine(fileIn));
-				} catch (Exception e) {
-					
-				}
-			}
-		} catch (FileNotFoundException e) {
-			throw e;
-		} 
-		return chatList;
-	}
-	
-	/*
+	//Other methods		
 	/**
 	 * Reads an input number of the  newest messages in the chat file.
 	 * @param numRead The number of messages to read
 	 * @return A list of the last numRead messages in the chat file
 	 * @throws FileNotFoundException
-	 *
-	public LinkedList<Message> readLastNum(int numRead) throws FileNotFoundException {
+	 */
+	public LinkedList<Message> readSome(int numRead) throws FileNotFoundException {
 
-		LinkedList<String> chatList = new LinkedList<String>();
+		LinkedList<Message> chatList = new LinkedList<Message>();
 		
 		int numReadFrom = getNewestMsgNum() - numRead;
 		
@@ -94,23 +51,24 @@ public class ChatReader extends FileReader {
 				
 				Message message = readLine(fileIn);
 				
-				if (message.getMsgNum() == numReadFrom) {
-									
+				if (message.getMessageNumber() == numReadFrom) {
+					chatList.add(message);				
 				}
+				
 			}
 		} catch (FileNotFoundException e) {
 			throw e;
 		} 
 		return chatList;
 	}
-	*/
+
 	
 	/**
 	 * Reads the current line of the chat file.
 	 * @param fileIn The current file scanner being read from
 	 * @return The message on the chat line
 	 */
-	private Message readLine(Scanner fileIn) throws Exception {
+	protected Message readLine(Scanner fileIn) {
 		
 		Message message = new TextMessage (EMPTY, EMPTY);
 		
@@ -119,68 +77,97 @@ public class ChatReader extends FileReader {
         Scanner lineIn = new Scanner(line);
         lineIn.useDelimiter(DELIMITER);
         
-		String msgNum = lineIn.next();
-		String msgType = lineIn.next();
+		int msgNum = lineIn.nextInt();
+		char msgType = lineIn.next().charAt(0);
 		
 		String sender = lineIn.next(); 
 		String timeSent = lineIn.next();
 		
-		//Text message
+		//Media message
 		if (msgType != TEXT) {
-
 			String description = lineIn.next();
 			String filepath = lineIn.next();
 			File media = new File(filepath); 
+			
 			try {
-				message = new MediaMessage (media, description, sender);
+				message = new MediaMessage (media, description, sender, timeSent);
 			} catch (Exception e) {
-				throw e;
+				//throw e;
 			} finally {
 				lineIn.close();
 			}
 			
-		//Media message
+		//Text message
 		} else {
 			String content = lineIn.next();
-			message = new TextMessage (content, sender);
+			message = new TextMessage (content, sender, timeSent);
 	        lineIn.close();
 		}
+		
+		message.setMessageNumber(msgNum);
 		
         return message ;	 
 	}
 	
+	/**
+	 * @return The newest msgNum in the chat file
+	 */
+	public int getNewestMsgNum() {
+		int newMsgNum = 0;
+		
+		try {	
+			Scanner fileIn = openRead();
+			
+			while(fileIn.hasNextLine()) {
+				newMsgNum = readLine(fileIn).getMessageNumber();
+			}
+			
+		} catch (FileNotFoundException e) {
+			//throw e;
+		} catch (Exception e) {
+			//throw e;
+		}
+		return newMsgNum;
+		
+	}
 	
 	/**
-	 * 
-	 * @param content
+	 * Converts a chat to string that can be written to a chat file.
+	 * @param message 
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void write(String content) throws FileNotFoundException, IOException {
+	public String convertToFileString(Message message) {
+			
+		String line = ""; 
 		
-		try {	
-			BufferedWriter fileOut = openWrite();
+		line += message.getMessageNumber() + DELIMITER;
+		line += message.getSender() + DELIMITER;
+		line += message.getTime() + DELIMITER;
+		
+		//Media Message
+		if (message.getMessageType() == MEDIA) {
+			line += message.getMessageType() + DELIMITER;
+			line += MEDIA + DELIMITER;
+			MediaMessage convMessage = (MediaMessage) message;
+			convMessage.getMessage();
+			convMessage.getDescription();
 			
-			String line = ""; 
-			
-			//line += /* msgNum + */ DELIMITER;
-			//line += /* msgType + */ DELIMITER;
-			line += content /* + DELIMITER */;
-			//line += /* timeSent + */ DELIMITER;
-			//line += /* username + */ DELIMITER;
+		//Text Message
+		} else {
+			line += message.getMessageType() + DELIMITER;
+			line += TEXT + DELIMITER;
+			TextMessage convMessage = (TextMessage) message;
 
-			fileOut.newLine();
-			fileOut.write(line);
-			
-			fileOut.close();
-			
-		} catch (FileNotFoundException e) {
-			throw e;
-		} catch (IOException e) {
-			throw e;
+			line += convMessage.getMessage() + DELIMITER;
 		}
+		
+		return line;
 	}
 	
-	private String TEXT = "Text";
+	/**	Represents the line as a text message */
+	private char TEXT = 't';
+	/**	Represents the line as a media message */
+	private char MEDIA = 'm';
 	
 }

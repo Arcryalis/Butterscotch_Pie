@@ -10,7 +10,10 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
+
 
 /**
  * A file reader reads and returns data from a file at a given location.
@@ -27,7 +30,7 @@ public abstract class FileReader {
 		setFile();
 	}
 	
-	// Get & Set methods
+	//Get & Set methods
 	/**
 	 * @return The current filepath to read/write to
 	 */
@@ -87,12 +90,36 @@ public abstract class FileReader {
 		}
 	}
 	
-
-	/** Reads data from the file */
-	//public abstract Object read() throws FileNotFoundException;
-
-	/** Writes data to the file */
-	//public abstract void write(Object content) throws FileNotFoundException;
+	/**
+	 * Reads as much data from the current file as possible.
+	 * @return A list of the data on each line of the file
+	 * @throws FileNotFoundException
+	 */
+	public <T> List<T> read() throws FileNotFoundException {
+		
+		LinkedList<T> contentList = new LinkedList<T>();
+		
+		try {	
+			Scanner fileIn = openRead();
+			
+			while(fileIn.hasNextLine()) {
+				contentList.add(readLine(fileIn));
+			}
+			
+			fileIn.close();
+			
+		} catch (FileNotFoundException e) {
+			throw e;
+		} 
+		return contentList;
+	}
+	
+	/** 
+	 * Reads a single line of the current file
+	 * @param fileIn The current file scanner being read from
+	 * @return The line formated appropriately for the type of FileReader.
+	 */
+	protected abstract <T> T readLine(Scanner fileIn);
 
 	//Attributes
 	/** The location of the file to be read / written to */

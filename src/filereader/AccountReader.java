@@ -1,5 +1,9 @@
 package filereader;
 
+/**
+ * AccountReader.java
+ * @author Hywel Williams
+ */
 
 import java.util.Scanner;
 import java.io.BufferedWriter;
@@ -10,10 +14,8 @@ import java.util.LinkedList;
 import login.Account;
 
 /**
- * AccountReader.java
- * @author Hywel Williams
+ * An AccountReader handles interactions with an account file.
  */
-
 
 public class AccountReader extends FileReader {
 
@@ -27,67 +29,11 @@ public class AccountReader extends FileReader {
 	
 	//Other methods
 	/**
-	 * Reads all accounts from the current file
-	 * @return A list of all accounts in the file
-	 * @throws FileNotFoundException
-	 */
-	public LinkedList<Account> read() throws FileNotFoundException {
-
-		LinkedList<Account> accountList = new LinkedList<Account>();
-		
-		try {	
-			Scanner fileIn = openRead();
-			
-			while(fileIn.hasNextLine()) {
-				accountList.add(readLine(fileIn));
-			}
-			
-			fileIn.close();
-			
-		} catch (FileNotFoundException e) {
-			throw e;
-		} 
-		return accountList;
-	}
-		
-	
-	/**
-	 * Reads all accounts who's usernames are on an input list
-	 * @param nameList A list of usernames to search for an read
-	 * @return A list of accounts who's usernames are on the list
-	 * @throws FileNotFoundException
-	 */
-	public LinkedList<Account> readNameList(LinkedList<String> nameList) throws FileNotFoundException {
-
-		LinkedList<Account> accountList = new LinkedList<Account>();
-		
-		try {	
-			Scanner fileIn = openRead();
-			
-			while(fileIn.hasNextLine()) {
-				
-				Account account = readLine(fileIn);
-				
-				if (nameList.contains(account.getUsername())){
-					accountList.add(account);
-				}
-			}
-			
-			fileIn.close();
-			
-		} catch (FileNotFoundException e) {
-			throw e;
-		} 
-		return accountList;
-	}
-	
-	
-	/**
 	 * Reads the current line of the account file and converts it to an account.
 	 * @param fileIn The current file scanner being read from
 	 * @return An account initialised with data from the line read
 	 */
-	private Account readLine(Scanner fileIn) {
+	protected Account readLine(Scanner fileIn) {
 		String line = fileIn.nextLine();
 		
         Scanner lineIn = new Scanner(line);
@@ -98,10 +44,20 @@ public class AccountReader extends FileReader {
 		String firstName = lineIn.next();
 		String lastName = lineIn.next();
 		String ukPhoneNo = lineIn.next();      
-        
+
+		String dob = lineIn.next();
+		String city = lineIn.next();
+		String dLastLogin = lineIn.next();  
+		
         lineIn.close();
         
-        return new Account(username, password, firstName, lastName, ukPhoneNo);	 
+        Account returnAccount = new Account(username, password, firstName, lastName, ukPhoneNo);
+        
+        returnAccount.setDob(dob);
+        returnAccount.setCity(city);
+        returnAccount.setDtLastLogin(dLastLogin);
+       
+        return returnAccount;
 	}
 	
 	
@@ -111,7 +67,7 @@ public class AccountReader extends FileReader {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void writeNew(Account account) throws FileNotFoundException, IOException {
+	public void write(Account account) throws FileNotFoundException, IOException {
 		
 		try {	
 			BufferedWriter fileOut = openWrite();
@@ -159,6 +115,7 @@ public class AccountReader extends FileReader {
 		if (account.getDtLastLogin() != null){
 			line += account.getDtLastLogin();
 		} 
+		line += DELIMITER;
 			
 		return line;
 	}
