@@ -5,8 +5,8 @@ import java.io.File;
 /**
  * This is the media message for media 
  * @author Osian
- * @version 0.5
- * @date 05 12 2016
+ * @version 0.6
+ * @date 06 12 2016
  *
  */
 
@@ -26,7 +26,7 @@ public class MediaMessage extends Message {
 	 * @throws Exception if message was longer than the set amount of characters a error is thrown.
 	 */
 	public MediaMessage(File message, String discription, String sender) throws Exception {
-		super(sender);
+		super(sender, 'm');
 		this.m_file = message;
 		if ((discription.length()) >= this.DESCPITION_LENGHT){
 			throw new Exception("Lenght of the description is too long"); 
@@ -36,7 +36,7 @@ public class MediaMessage extends Message {
 	}
 	
 	public MediaMessage(File message, String discription, String sender, String time) throws Exception {
-		super(sender, time);
+		super(sender,'m', time);
 		this.m_file = message;
 		if ((discription.length()) >= this.DESCPITION_LENGHT){
 			throw new Exception("Lenght of the description is too long"); 

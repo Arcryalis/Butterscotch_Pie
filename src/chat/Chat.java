@@ -1,7 +1,10 @@
 package chat;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
+
+import filereader.ChatReader;
 /**
  * This is the main class of CHat that contains the main logit of chat and contains
  * any interactation that the GUI would do with Chat
@@ -135,6 +138,9 @@ public class Chat {
 			return this.getMessage(indexMessageNumber);
 		}
 	}
+	public char getMessageType(int messageNumber) throws Exception{
+		return this.getMessage(messageNumber).getMessageType();
+	}
 	
 	public LinkedList<Message> returnAllChats(){
 		return this.m_listOfMessages;
@@ -144,8 +150,14 @@ public class Chat {
 		//some code will go here once I have access to the database
 	}
 	
-	public void loadtChat(File Chat){
-		//again some code will go here once i have access to the databse
+	/**
+	 * This method loads in the chat from memory from a specific file.
+	 * @param Chat The File that contains the chat itself 
+	 * @throws FileNotFoundException  If file is not found this error is thrown
+	 */
+	public void loadChat(String Chat) throws FileNotFoundException{
+		ChatReader chat = new ChatReader(m_chatLocation);
+		this.m_listOfMessages = chat.readAll();
 	}
 
 }

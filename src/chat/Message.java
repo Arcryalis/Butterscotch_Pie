@@ -13,7 +13,9 @@ public abstract class Message {
 	protected Date m_dateStamp = new Date();
 	protected String m_time;
 	protected String m_sender;
-	
+	protected char m_messageType;
+	protected int m_messageNo;
+
 
 
 	/**
@@ -24,9 +26,11 @@ public abstract class Message {
 	 * to the user.
 	 * @param sender THe person who sent the message
 	 */
-	public Message(String sender){
+	public Message(String sender, char messageType){
 		this.m_time = m_dateStamp.toString();
 		this.m_sender = sender;
+		this.m_messageType = messageType;
+		
 	}
 	
 	/**
@@ -35,9 +39,11 @@ public abstract class Message {
 	 * @param sender The sender of the message
 	 * @param time Time as String of the message
 	 */
-	public Message(String sender, String time){
+	public Message(String sender,char messageType, String time){
 		this.m_time = time;
+		this.m_messageType = messageType;
 		this.m_sender = sender;
+		
 	}
 
 //eunumarated type 
@@ -57,6 +63,17 @@ public abstract class Message {
 
 	public String getSender() {
 		return m_sender;
+	}
+	
+	public void setMessageNumber(int messageNo){
+		this.m_messageNo = messageNo;
+	}
+	public int getMessageNumber(){
+		return this.m_messageNo;
+	}
+	
+	public char getMessageType(){
+		return this.m_messageType;
 	}
 	
 	

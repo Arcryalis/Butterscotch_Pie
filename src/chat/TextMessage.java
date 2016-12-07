@@ -4,7 +4,7 @@ package chat;
 /**
  * This is the Text message class
  * @author Osian
- * @version 1
+ * @version 0.6
  * date 28/11/16
  */
 
@@ -18,7 +18,11 @@ public class TextMessage extends Message {
 	 * @param Datestamp the date of the message 
 	 */
 	public TextMessage(String message,String sender){
-		super(sender);
+		super(sender,'t');
+		this.m_message = message;
+	}
+	public TextMessage(String message, String sender, String time) {
+		super(sender, 't', time);
 		this.m_message = message;
 	}
 	/**
