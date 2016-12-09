@@ -1,9 +1,6 @@
 package filereader_tests;
 
 import static org.junit.Assert.*;
-
-import java.util.LinkedList;
-
 import org.junit.Test;
 
 import filereader.AccountReader;
@@ -12,6 +9,8 @@ import login.Account;
 public class AccountReaderTests {
 	
 	private static final Account FIRST_ACCOUNT = new Account("Sev", "p1", "f.name 1", "s.name 1", "1792");
+	private static final Account SECOND_ACCOUNT = new Account("u1", "p1", "f.name 1", "s.name 1", "01792");
+	private static final Account THIRD_ACCOUNT = new Account("user.t", "pass.t", "f.t.names", "s.t.names", "2016.t");
 
 	/**
 	 * Test readAll() executes.
@@ -22,7 +21,7 @@ public class AccountReaderTests {
 		try {
 			reader.read();
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e + " FAIL Test1a");
 		}
 	}
 	
@@ -34,45 +33,49 @@ public class AccountReaderTests {
 		AccountReader reader = new AccountReader();
 		
 		try {
-			assertEquals(FIRST_ACCOUNT.toString(), reader.read().peek().toString());
+			assertEquals(SECOND_ACCOUNT.getUsername(), reader.read().get(0).getUsername());
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e + " FAIL Test1b");
 		}
 	}
-	
 
 	/**
-	 * Test readNameList()
+	 * Test  writeNew() and delete()
 	 */
 	@Test  
     public void Test2a () {
+		
 		AccountReader reader = new AccountReader();
 		
-		LinkedList<String> nameList = new LinkedList<String>();
-		nameList.add("John");
-		nameList.add("Tim");
+		Account testAccount = THIRD_ACCOUNT;
+		try {
+			reader.write(testAccount);
+		} catch (Exception e) {
+			System.out.println(e + "FAIL Test2a write");
+		}
 		
 		try {
-			reader.readNameList(nameList);
+			reader.delete(testAccount);
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e + "FAIL Test2a delete");
 		}
 	}
-	
+
 	/**
-	 * Tests writeNew()
+	 * Tests update()
 	 */
 	@Test  
     public void Test3a () {
 		AccountReader reader = new AccountReader();
 		
-		//ACCOUNT STORES AN INT - WHICH CHOPS OFF THE 0 in 01792
-		Account testAccount = new Account("user", "pass", "f.names", "s.names", "2016");
+		Account testAccount = SECOND_ACCOUNT;
+		testAccount.setCity("New world");
+		
 		try {
-			reader.writeNew(testAccount);
+			reader.update(testAccount);
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e + "FAIL Test3a update");
 		}
+
 	}
-	
 }
