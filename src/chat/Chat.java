@@ -9,8 +9,8 @@ import filereader.ChatReader;
  * This is the main class of CHat that contains the main logit of chat and contains
  * any interactation that the GUI would do with Chat
  * @author Osian 
- * @date 06 12 16
- * @version 0.6
+ * @date 09 12 16
+ * @version 0.65
  *
  */
 public class Chat {
@@ -76,6 +76,12 @@ public class Chat {
 		this.m_messageNumber ++;
 		
 	}
+	/** 
+	 * Creates a new message that is inteneded to be created from the database
+	 * @param message the message that is being created
+	 * @param sender the name of the person who sent the message
+	 * @param time the time that the message was sent.
+	 */
 	private void newTextMessage(String message, String sender, String time){
 		Message load =  new TextMessage(message, sender, time);
 		this.m_listOfMessages.add(load);
@@ -114,7 +120,7 @@ public class Chat {
 	 * @param Time The time of the message as a String 
 	 * @throws Exception Exception If message is too long Excpetion is thrown  - @See MediaMessage
 	 */
-	private void newMediaMessage(File message, String discription, String sender,String Time) throws Exception {
+	public void newMediaMessage(File message, String discription, String sender,String Time) throws Exception {
 		try {
 			Message load =  new MediaMessage(message,discription,sender,Time);
 			this.m_listOfMessages.add(load);
@@ -138,12 +144,45 @@ public class Chat {
 			return this.getMessage(indexMessageNumber);
 		}
 	}
+	
+	/**
+	 * This  returns the message type of a message. this is returned as a char
+	 * @param messageNumber the message that is being queried as a int 
+	 * @return message type of message
+	 * @throws Exception if message does not return
+	 */
 	public char getMessageType(int messageNumber) throws Exception{
 		return this.getMessage(messageNumber).getMessageType();
 	}
 	
+	/**
+	 * This returns all chats
+	 * @return all chats as a linked list 
+	 */
 	public LinkedList<Message> returnAllChats(){
 		return this.m_listOfMessages;
+	}
+	
+	
+	/**
+	 * Gets the  last X of messages
+	 * @param amountOfMessages the amount of messages you need
+	 * @return X-n of messages
+	 */
+	public LinkedList<Message> getLastXMessages(int amountOfMessages){
+		LinkedList<Message> returnMessages = new LinkedList<Message>();
+		if(amountOfMessages > this.m_messageNumber){
+			System.out.println("This message is out of range");
+			return null;
+		}
+		else {
+			int x =  this.getChatSize() - amountOfMessages;
+			for (int i = x; 
+					i < this.getChatSize(); i++  ){
+				returnMessages.add(this.m_listOfMessages.get(i));
+			}
+			return returnMessages;
+		}
 	}
 	
 	public void saveChat(){
@@ -158,6 +197,14 @@ public class Chat {
 	public void loadChat(String Chat) throws FileNotFoundException{
 		ChatReader chat = new ChatReader(m_chatLocation);
 		this.m_listOfMessages = chat.readAll();
+	}
+	
+	/**
+	 * Returns the chat size of the message
+	 * @return
+	 */
+	public int getChatSize(){
+		return this.m_listOfMessages.size();
 	}
 
 }
