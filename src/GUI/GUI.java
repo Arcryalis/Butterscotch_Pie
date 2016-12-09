@@ -4,14 +4,7 @@ import java.awt.Component;
 import java.awt.Color;
 
 public abstract class GUI {
-	
-	protected JFrame frame;
-	protected LinkedList<JTextField> textfield;
-	protected LinkedList<JPasswordField> passwordfield;
-	protected LinkedList<JButton> button;
-	protected LinkedList<JLabel> label;
-	protected LinkedList<JScrollBar> scrollbar;
-	protected JPanel panel;
+
 	
 	public GUI(){
 		
