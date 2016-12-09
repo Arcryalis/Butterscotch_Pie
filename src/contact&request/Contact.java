@@ -1,3 +1,4 @@
+package login;
 
 public class Contact {
 	private String m_username;
