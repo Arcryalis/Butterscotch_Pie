@@ -1,5 +1,7 @@
 import java.awt.EventQueue;
 
+import login.*;
+
 /**
  * MainProgram.java
  * @author Yiu Ting Lai
@@ -61,7 +63,7 @@ public class MainProgram {
 		// Call to ContactsReader
 	}
 	
-	public static void fetchRequest() {
+	public static void fetchRequests() {
 		// Call to ContactsReader
 	}
 	
