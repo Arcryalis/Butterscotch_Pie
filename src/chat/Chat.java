@@ -80,12 +80,12 @@ public class Chat {
 		
 	}
 	/** 
-	 * Creates a new message that is inteneded to be created from the database
+	 * Creates a new message that is intended to be created from the database
 	 * @param message the message that is being created
 	 * @param sender the name of the person who sent the message
 	 * @param time the time that the message was sent.
 	 */
-	private void newTextMessage(String message, String sender, String time){
+	public void newTextMessage(String message, String sender, String time){
 		Message load =  new TextMessage(message, sender, time);
 		this.m_listOfMessages.add(load);
 		this.m_messageNumber ++;
