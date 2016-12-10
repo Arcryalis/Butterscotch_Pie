@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -14,13 +15,22 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+
+import filereader.ContactsReader;
+
 import javax.swing.JPanel;
 
 import login.*;
 
+/**
+ * RequestGUI.java
+ * @author Yiu Ting Lai
+ */
+
 public class RequestGUI {
 
 	private JFrame m_frame;
+	private JLabel m_lblBottomBG;
 	private JScrollPane m_requestsPane;
 	private JList m_requestsList;
 	private JLabel m_lblImgProf;
@@ -44,6 +54,7 @@ public class RequestGUI {
 
 	/**
 	 * Create the application.
+	 * @wbp.parser.entryPoint
 	 */
 	public RequestGUI(HomeGUI parent) {
 		this.parent = parent;
@@ -77,6 +88,11 @@ public class RequestGUI {
 	}
 	
 	private void initializeMainGUI() {
+		m_lblBottomBG = new JLabel("");
+		m_lblBottomBG.setBackground(new Color(255, 255, 255));
+		m_lblBottomBG.setBounds(0, 0, 500, 375);
+		m_lblBottomBG.setIcon(new ImageIcon("res/requestBG.png"));
+		
 		m_lblImgProf = new JLabel();
 		m_lblImgProf.setBounds(245, 5, 250, 250);
 		
@@ -137,21 +153,52 @@ public class RequestGUI {
 		m_frame.getContentPane().add(m_lblImgProf);
 		m_frame.getContentPane().add(m_btnAccept);
 		m_frame.getContentPane().add(m_btnCancel);
+		m_frame.getContentPane().add(m_lblBottomBG);
 		
 	}
 	
 	public boolean accept() {
 		
+		int target = m_requestsList.getSelectedIndex();
+		
+		try {
+			new ContactsReader().updateContacts(m_requests[target], MainProgram.getM_ac().getUsername(), false);
+		}catch(Exception e) {
+			System.out.println("remove: " + m_requests[target] + " <<<Exception!>>>");
+		}
+		
 		MainProgram.fetchContacts();
 		MainProgram.fetchRequests();
-		parent.initializeData();
+		initializeData();
+		m_requestsList.setListData(m_requests);
+		m_requestsList.setSelectedIndex(-1);
+		
+		parent.refreshGUI();
+		
+		m_btnAccept.setEnabled(false);
+		m_btnCancel.setEnabled(false);
 		
 		return true;
 	}
 	
 	public boolean cancel() {
 		
+		int target = m_requestsList.getSelectedIndex();
+		
+		try {
+			new ContactsReader().delete(MainProgram.getM_ac().getUsername(), m_requests[target]);
+		}catch(Exception e) {
+			System.out.println("remove: " + m_requests[target] + " <<<Exception!>>>");
+		}
+		
 		MainProgram.fetchRequests();
+		initializeData();
+		m_requestsList.setListData(m_requests);
+		m_requestsList.setSelectedIndex(-1);
+		parent.refreshGUI();
+		
+		m_btnAccept.setEnabled(false);
+		m_btnCancel.setEnabled(false);
 		
 		return true;
 	}
@@ -162,9 +209,17 @@ public class RequestGUI {
 		
 		Account target;
 		// call to ContactsReader and assign result to target
-/**/	target = new Account(m_requests[index], "", "MyFirstName" + index, "MyLastName" + index, "01792-" + index);	/**/
+/**/	try{
+			target = new ContactsReader().getAccount(m_requests[index]);
+			
+		}catch (Exception e){
+			target = new Account("NO NAME", "", "NULL", "NULL", "NULL");
+			
+		}
+/**/
+		target.setProfilePic("res/profileImg.png");
+		m_lblImgProf.setIcon(new ImageIcon(target.getProfilePic()));
 		
-		m_lblImgProf.setIcon(new ImageIcon("res/profileImg.png"));
 		
 		// Update window
 		m_frame.setVisible(true);

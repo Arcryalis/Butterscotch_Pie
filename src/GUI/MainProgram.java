@@ -1,5 +1,7 @@
 import java.awt.EventQueue;
+import java.util.LinkedList;
 
+import filereader.ContactsReader;
 import login.*;
 
 /**
@@ -24,8 +26,8 @@ public class MainProgram {
 	public static void setM_cl(ContactList m_cl) {				MainProgram.m_cl = m_cl;					}
 	public static void setM_rl(RequestList m_rl) {				MainProgram.m_rl = m_rl;					}
 	
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws ClassNotFoundException {
+		Class.forName("com.mysql.jdbc.Driver");
 		testStups();
 		
 		// spawn LoginGUI window
@@ -61,27 +63,48 @@ public class MainProgram {
 	
 	public static void fetchContacts() {
 		// Call to ContactsReader
+		try {
+			m_cl = new ContactList();
+			LinkedList<String> contacts = new ContactsReader().getContactsOf(m_ac);
+			
+			for(int i=0; i<contacts.size(); i++) {
+				m_cl.add(new Contact(contacts.get(i)));
+			}
+			
+		}catch(Exception e) {
+			for(int i = 2; i < 30; i++) {
+				m_cl.add(new Contact("NullAccount_" + i));
+			}
+		}
 	}
 	
 	public static void fetchRequests() {
 		// Call to ContactsReader
+		try {
+			m_rl = new RequestList();
+			LinkedList<String> contacts = new ContactsReader().getRequests(m_ac.getUsername(), true);
+			
+			for(int i=0; i<contacts.size(); i++) {
+				m_rl.add(new Request(contacts.get(i), true));
+			}
+			
+		}catch(Exception e) {
+			for(int i = 30; i < 40; i++) {
+				m_rl.add(new Request("NullAccount_" + i, true));
+			}
+		}
 	}
 	
 	public static void testStups() {
 		System.out.print("MainProgram: Using testing Stups");
 		
-		m_ac = new Account("testAccount_1", "1234", "MyFirstName", "MyLastName", "01792-123-456");
+		m_ac = new Account("Sev", "p2", "Seven", "s.name 4", "59648");
 		m_cl = new ContactList();
 		m_rl = new RequestList();
 		m_LoginState = true;
 		
-		for(int i = 2; i < 30; i++) {
-			m_cl.add(new Contact("testAccount_" + i));
-		}
-		
-		for(int i = 30; i < 40; i++) {
-			m_rl.add(new Request("testAccount_" + i, true));
-		}
+		fetchContacts();
+		fetchRequests();
 		
 	}
 }

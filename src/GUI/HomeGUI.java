@@ -17,6 +17,10 @@ import java.awt.event.MouseListener;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
+
+import filereader.AccountReader;
+import filereader.ContactsReader;
+
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,6 +28,8 @@ import javax.swing.JDialog;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
+
+import login.*;
 
 /**
  * HomeGUI.java
@@ -33,11 +39,15 @@ import javax.swing.JPanel;
 public class HomeGUI {
 	// GUI Components
 	private JFrame m_frame;
+	private JLabel m_lblTopBG;
+	private JLabel m_lblBottomBG;
+	private JButton m_btnSearch;
 	private JButton m_btnRequest;
 	private JLabel m_lblLoginUser;
 	private JButton m_btnLogoff;
 	private JScrollPane m_contactsPane;
 	private JList m_contactsList;
+	private ActionListener m_searchAction;
 	private ActionListener m_requestAction;
 	private ActionListener m_logoffAction;
 	private MouseListener m_contactMouse;
@@ -56,11 +66,11 @@ public class HomeGUI {
 	// Data Components
 	private String m_account;
 	private String[] m_contacts;
+	private int m_noOfRequest;
 	private int m_clicksCount = 0;
 	
-
-
-
+	
+	
 	/**
 	 * Create the application.
 	 */
@@ -75,6 +85,7 @@ public class HomeGUI {
 	 */
 	private void initialize() {
 		m_frame = new JFrame();
+		m_frame.getContentPane().setBackground(Color.WHITE);
 		m_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		m_frame.setBounds(100, 100, 800, 600);
 		m_frame.getContentPane().setLayout(null);
@@ -83,19 +94,45 @@ public class HomeGUI {
 		initializeMainGUI();
 		initializeContactGUI();
 		
+		m_frame.getContentPane().add(m_lblTopBG);
+		m_frame.getContentPane().add(m_lblBottomBG);
+		
 		m_frame.setVisible(true);
 
 	}
 	
-	private void initializeData() {
+	public void initializeData() {
 		m_account = MainProgram.getM_ac().getUsername();
 		m_contacts = new String[MainProgram.getM_cl().size()];
 		for(int i = 0; i < m_contacts.length; i++) {
 			m_contacts[i] = ((Contact)MainProgram.getM_cl().get(i)).getM_username();
 		}
+		m_noOfRequest = MainProgram.getM_rl().size();
 	}
 	
 	private void initializeMainGUI() {
+		m_lblTopBG = new JLabel("");
+		m_lblTopBG.setBounds(0, 0, 800, 365);
+		m_lblTopBG.setIcon(new ImageIcon("res/topbar.png"));
+		
+		m_lblBottomBG = new JLabel("");
+		m_lblBottomBG.setBounds(0, 450, 800, 140);
+		m_lblBottomBG.setIcon(new ImageIcon("res/bottombar.png"));
+		
+		m_searchAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				// Call to HomeGUI.search for check requests
+				System.out.println("m_requestAction: Clicked on: request button");
+				search();
+			}
+		};
+		
+		m_btnSearch = new JButton("");
+		m_btnSearch.setBounds(25, 6, 50, 45);
+		m_btnSearch.setIcon(new ImageIcon("res/search.png"));
+		m_btnSearch.addActionListener(m_searchAction);
+		
 		m_requestAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -105,14 +142,18 @@ public class HomeGUI {
 			}
 		};
 
-		m_btnRequest = new JButton("0");
+		m_btnRequest = new JButton(m_noOfRequest + "");
 		m_btnRequest.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		m_btnRequest.setIcon(new ImageIcon("res/newRequest.png"));
-		m_btnRequest.setBounds(27, 6, 100, 45);
+		m_btnRequest.setBounds(82, 6, 100, 45);
 		m_btnRequest.addActionListener(m_requestAction);
+		if(m_noOfRequest == 0) {
+			m_btnRequest.setEnabled(false);
+		}
 
 		m_lblLoginUser = new JLabel("Welcome, " + m_account);
-		m_lblLoginUser.setBounds(150, 20, 250, 20);
+		m_lblLoginUser.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		m_lblLoginUser.setBounds(210, 15, 400, 30);
 		
 		m_logoffAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -124,7 +165,8 @@ public class HomeGUI {
 		};
 
 		m_btnLogoff = new JButton("Log Off");
-		m_btnLogoff.setBounds(670, 20, 117, 30);
+		m_btnLogoff.setIcon(new ImageIcon("res/logout.png"));
+		m_btnLogoff.setBounds(658, 10, 117, 45);
 		m_btnLogoff.addActionListener(m_logoffAction);
 
 		m_contactMouse = new MouseAdapter() {
@@ -151,14 +193,16 @@ public class HomeGUI {
 		};
 
 		m_contactsList = new JList(m_contacts);
+		m_contactsList.setBackground(new Color(224, 255, 255));
 		m_contactsList.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		m_contactsList.addMouseListener(m_contactMouse);
 		m_contactsPane = new JScrollPane(m_contactsList);
-		m_contactsPane.setBounds(25, 55, 250, 500);
+		m_contactsPane.setBounds(25, 55, 250, 400);
 		
 		m_contactPanel = new JPanel();
+		m_contactPanel.setBackground(new Color(255, 255, 224));
 		m_contactPanel.setBounds(300, 55, 475, 500);
-		
+		m_frame.getContentPane().add(m_btnSearch);
 		m_frame.getContentPane().add(m_btnRequest);
 		m_frame.getContentPane().add(m_lblLoginUser);
 		m_frame.getContentPane().add(m_btnLogoff);
@@ -203,9 +247,10 @@ public class HomeGUI {
 		};
 		
 		m_btnRemove = new JButton("Remove");
-		m_btnRemove.setBounds(5, 460, 200, 35);
+		m_btnRemove.setBounds(5, 455, 200, 40);
 		m_btnRemove.setForeground(Color.RED);
 		m_btnRemove.setBackground(new Color(255, 0, 0));
+		m_btnRemove.setIcon(new ImageIcon("res/remove.png"));
 		m_btnRemove.addActionListener(m_removeAction);
 		m_btnRemove.setEnabled(false);
 		
@@ -219,7 +264,8 @@ public class HomeGUI {
 		};
 		
 		m_btnSendMsg = new JButton("Send Messages");
-		m_btnSendMsg.setBounds(270, 460, 200, 35);
+		m_btnSendMsg.setBounds(270, 455, 200, 40);
+		m_btnSendMsg.setIcon(new ImageIcon("res/send.png"));
 		m_btnSendMsg.addActionListener(m_sendMsgAction);
 		m_btnSendMsg.setEnabled(false);
 		
@@ -230,6 +276,8 @@ public class HomeGUI {
 		m_contactPanel.add(m_lblPhone);
 		m_contactPanel.add(m_btnRemove);
 		m_contactPanel.add(m_btnSendMsg);
+		
+		
 		
 	}
 	
@@ -242,11 +290,33 @@ public class HomeGUI {
 	
 	
 	
-	public void chkRequest() {
+	public void search() {
+		System.out.println("search(): spawn a SearchGUI window");
+		
+		// call to SearchGUI to spawn a window for searching
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RequestGUI window = new RequestGUI();
+					SearchGUI window = new SearchGUI();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	
+	
+	public void chkRequest() {
+		System.out.println("chkRequest(): spawn a RequestGUI window");
+		
+		HomeGUI me = this;
+		
+		// call to RequestGUI to spawn a window for searching
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					RequestGUI window = new RequestGUI(me);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -265,7 +335,12 @@ public class HomeGUI {
 		
 		Account target;
 		// call to ContactsReader and assign result to target
-/**/	target = new Account(m_contacts[index], "", "MyFirstName" + index, "MyLastName" + index, "01792-" + index);	/**/
+		try{
+			target = new ContactsReader().getAccount(m_contacts[index]);
+		}catch (Exception e){
+			target = new Account("NO NAME", "", "NULL", "NULL", "NULL");
+		}
+/**/		/**/
 		
 		m_lblPhone.setText(target.getUkPhoneNo());
 		m_lblFirstName.setText("First Name: " + target.getFirstName());
@@ -305,10 +380,17 @@ public class HomeGUI {
 		if(n == 0) {
 			System.out.println("remove: " + m_contacts[target]);
 			//Call to <DB> for remove
-/**/		//Call to <DB> for remove	/**/
+			try {
+				new ContactsReader().delete(MainProgram.getM_ac().getUsername(), m_contacts[target]);
+			}catch(Exception e) {
+				System.out.println("remove: " + m_contacts[target] + " <<<Exception!>>>");
+			}
 			
 			MainProgram.fetchContacts();
-			initializeData();
+			refreshGUI();
+			//m_frame.pack();
+			
+			
 			
 			m_btnRemove.setEnabled(false);
 			m_btnSendMsg.setEnabled(false);
@@ -316,6 +398,16 @@ public class HomeGUI {
 		
 		
 		return true;
+	}
+	
+	public void refreshGUI() {
+		initializeData();
+		m_contactsList.setListData(m_contacts);
+		m_contactsList.setSelectedIndex(-1);
+		m_btnRequest.setText(m_noOfRequest + "");
+		if(m_noOfRequest == 0) {
+			m_btnRequest.setEnabled(false);
+		}
 	}
 
 	/**
