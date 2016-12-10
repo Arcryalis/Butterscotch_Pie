@@ -1,8 +1,10 @@
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,7 +24,7 @@ public class ResetPasswordGUI extends GUI{
 	private JPasswordField pwrdfld;
 	private JPasswordField pwrdfld2;
 	private JPasswordField opwrdfld;
-		
+			
 		
 	public ResetPasswordGUI() {
 	
@@ -57,8 +59,6 @@ public class ResetPasswordGUI extends GUI{
 			public void actionPerformed(ActionEvent arg0) {
 				String uname = unametxtfld.getText();
 				String opass = opwrdfld.getPassword().toString();
-				String pass1 = pwrdfld.getPassword().toString();
-				String pass2 = pwrdfld2.getPassword().toString();
 				//error
 				if (uname.equals("") || opwrdfld.getPassword().length == 0 || pwrdfld.getPassword().length == 0 || pwrdfld2.getPassword().length == 0){
 					JOptionPane.showMessageDialog(null, "Please complete all fields");
@@ -66,7 +66,7 @@ public class ResetPasswordGUI extends GUI{
 				else{
 					if(/*change to check if account is real for username and pass*/uname.equals(opass)){
 						//query to change password in db
-						if(pwrdfld.getPassword().toString().equals(pwrdfld2.getPassword().toString())){
+						if(pwrdfld.getPassword().equals(pwrdfld2.getPassword())){
 							JOptionPane.showMessageDialog(null, "Password Changed");
 						}
 						else{
@@ -92,40 +92,51 @@ public class ResetPasswordGUI extends GUI{
 		JLabel lblOldpassword = new JLabel("Old Password");
 		
 		opwrdfld = new JPasswordField();
+		
+		JLabel lblLogo = new JLabel("");
+		Image logo = new ImageIcon(this.getClass().getResource("/ss.png")).getImage();
+		lblLogo.setIcon(new ImageIcon(logo));
+		
 		GroupLayout groupLayout = new GroupLayout(frmResetPassword.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap(95, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+					.addContainerGap(101, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnOk)
-							.addGap(33))
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addComponent(btnOk)
+									.addGap(33))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblNewPassword)
+										.addComponent(lblUsername)
+										.addComponent(lblOldpassword, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblRepeatNewPassword))
+									.addGap(12)))
+							.addGap(18)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(pwrdfld2)
+								.addComponent(btnCancel)
+								.addComponent(unametxtfld, 201, 201, Short.MAX_VALUE)
+								.addComponent(opwrdfld)
+								.addComponent(pwrdfld))
+							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewPassword)
-								.addComponent(lblRepeatNewPassword)
-								.addComponent(lblOldpassword, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblUsername))
-							.addGap(12)))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(pwrdfld, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-						.addComponent(pwrdfld2, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnCancel)
-						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(opwrdfld, Alignment.LEADING)
-							.addComponent(unametxtfld, Alignment.LEADING)))
-					.addContainerGap(120, Short.MAX_VALUE))
+							.addComponent(lblLogo)
+							.addGap(129))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(101)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(unametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblUsername))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addContainerGap()
+					.addComponent(lblLogo)
+					.addGap(21)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblUsername)
+						.addComponent(unametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(8)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblOldpassword, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
 						.addComponent(opwrdfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -133,7 +144,7 @@ public class ResetPasswordGUI extends GUI{
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(pwrdfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewPassword))
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblRepeatNewPassword)
 						.addComponent(pwrdfld2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -144,7 +155,7 @@ public class ResetPasswordGUI extends GUI{
 					.addGap(19))
 		);
 		frmResetPassword.getContentPane().setLayout(groupLayout);
-		frmResetPassword.setBounds(100, 100, 450, 300);
+		frmResetPassword.setBounds(100, 100, 450, 350);
 		frmResetPassword.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

@@ -6,6 +6,7 @@ import java.awt.Color;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -50,6 +51,24 @@ public class LoginGUI extends GUI{
 		passwordpwrdfld = new JPasswordField();
 		
 		btnLogIn = new JButton("Log In");
+		btnLogIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String uname = usernametxtfld.getText();
+				String pass = passwordpwrdfld.getPassword().toString();
+				
+				if (){
+					JOptionPane.showMessageDialog(null, "Please complete all fields");
+				}
+				else{
+					if(new AccountReader().checkUserPass(uname, pass)){
+						//homeGUI
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Incorrect Username/Password");
+					}
+				}
+			}
+		});
 		
 		btnResetPassword = new JButton("Reset Password");
 		btnResetPassword.addActionListener(new ActionListener() {
