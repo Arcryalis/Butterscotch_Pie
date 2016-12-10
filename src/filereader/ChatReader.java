@@ -6,16 +6,15 @@ import java.io.File;
 /**
  * ChatReader.java
  * @author Hywel Williams
+ * @author Osian Smith
  */
 
 import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import chat.Message;
 import chat.TextMessage;
@@ -100,7 +99,8 @@ public class ChatReader extends FileReader {
 	//Private & Protected methods
 	private String toFileFormat(Message message) {
 
-		String line = EMPTY;
+		String line = OPEN_VALUES;
+		
 
 		line += MSG_NUM + EQUALS;
 		line += String.format(CONVERT_FORMAT, message.getMessageNumber()) + DELIMITER;
@@ -127,6 +127,7 @@ public class ChatReader extends FileReader {
 			line += DESCRIPTION + EQUALS;
 			line += String.format(CONVERT_FORMAT, mMessage.getDescription());
 		}
+		line += CLOSE_VALUES + END_LINE;
 		return line;
 
 
@@ -145,7 +146,6 @@ public class ChatReader extends FileReader {
 		Message message;
 
 		try {
-			String msgnum = result.getString(MSG_NUM);
 			String sender = result.getString(SENDER);
 			String timeSent = result.getString(TIME_SENT);
 			String messageType = result.getString(MESSAGE_TYPE);
@@ -171,7 +171,7 @@ public class ChatReader extends FileReader {
 		try {
 			openSQL();
 
-			query += convertToFileString(writingMessage);
+			query += toFileFormat(writingMessage);
 			Statement statment = m_connection.createStatement();
 			statment.executeUpdate(query);
 
@@ -190,22 +190,22 @@ public class ChatReader extends FileReader {
 
 	}
 
-	private String convertToFileString(Message message) {
-		String line = OPEN_VALUES;
-		line += String.format(CONVERT_FORMAT, message.getSender()) + DELIMITER;
-		line += String.format(CONVERT_FORMAT, message.getDateStamp()) + DELIMITER;
-		line += String.format(CONVERT_FORMAT, message.getMessageType()) + DELIMITER;
-		line += String.format(CONVERT_FORMAT, message.getMessageContent()) + DELIMITER;
-		if(message.getMessageType() == 'm'){
-			line += String.format(CONVERT_FORMAT, ((MediaMessage) message).getDescription()) + DELIMITER;
-		}
-		else{
-			line += "";
-		}
-
-
-		return line;
-	}
+//	private String convertToFileString(Message message) {
+//		String line = OPEN_VALUES;
+//		line += String.format(CONVERT_FORMAT, message.getSender()) + DELIMITER;
+//		line += String.format(CONVERT_FORMAT, message.getDateStamp()) + DELIMITER;
+//		line += String.format(CONVERT_FORMAT, message.getMessageType()) + DELIMITER;
+//		line += String.format(CONVERT_FORMAT, message.getMessageContent()) + DELIMITER;
+//		if(message.getMessageType() == 'm'){
+//			line += String.format(CONVERT_FORMAT, ((MediaMessage) message).getDescription()) + DELIMITER;
+//		}
+//		else{
+//			line += "";
+//		}
+//
+//
+//		return line;
+//	}
 
 	//Attributes
 	private final String m_chatName;
@@ -216,8 +216,7 @@ public class ChatReader extends FileReader {
 
 	/**	Represents the line as a text message */
 	private static final String TEXT = "t";
-	/**	Represents the line as a media message */
-	private static final String MEDIA = "m";
+
 
 	/** Name of the char table's attribute for message number */
 	private static final String MSG_NUM = "messagenum";	
