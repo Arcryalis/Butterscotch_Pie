@@ -1,17 +1,18 @@
 package chat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * This is a message object  that contains general infomation about a message
  * @author Osian
  * @date 10/12/16
- * @version 0.7
+ * @version 0.75
  *
  */
 public abstract class Message {
 	
-	protected Date m_dateStamp = new Date();
+	protected SimpleDateFormat m_dateStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	protected String m_time;
 	protected String m_sender;
 	protected char m_messageType;
@@ -28,7 +29,7 @@ public abstract class Message {
 	 * @param sender THe person who sent the message
 	 */
 	public Message(String sender, char messageType){
-		this.m_time = m_dateStamp.toString();
+		this.m_time = m_dateStamp.format(new Date());
 		this.m_sender = sender;
 		this.m_messageType = messageType;
 		
