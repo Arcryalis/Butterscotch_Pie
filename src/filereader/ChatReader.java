@@ -127,6 +127,7 @@ public class ChatReader extends FileReader {
 			line += DESCRIPTION + EQUALS;
 			line += String.format(CONVERT_FORMAT, mMessage.getDescription());
 		}
+		return line;
 
 
 	}
