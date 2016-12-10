@@ -111,7 +111,7 @@ public class ChatReader extends FileReader {
 
 		line += MESSAGE_TYPE + EQUALS;
 		
-		String msgType = Smessage.getMessageType();
+		String msgType = String.valueOf(message.getMessageType());
 		line += String.format(CONVERT_FORMAT, msgType) + DELIMITER;
 
 		if (msgType.equalsIgnoreCase(TEXT)) {
