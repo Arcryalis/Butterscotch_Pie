@@ -5,8 +5,8 @@ import java.io.File;
 /**
  * This is the media message for media 
  * @author Osian
- * @version 0.6
- * @date 06 12 2016
+ * @version 0.7
+ * @date 10 12 2016
  *
  */
 
@@ -73,6 +73,10 @@ public class MediaMessage extends Message {
 		System.out.println(m_Description);
 		System.out.println(m_file.toString());
 		
+	}
+	
+	public String getFileAddress(){
+		return this.m_file.getAbsolutePath();
 	}
 	
 

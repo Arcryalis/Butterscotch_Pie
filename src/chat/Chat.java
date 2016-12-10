@@ -9,8 +9,8 @@ import filereader.ChatReader;
  * This is the main class of CHat that contains the main logit of chat and contains
  * any interactation that the GUI would do with Chat
  * @author Osian 
- * @date 09 12 16
- * @version 0.65
+ * @date 10 12 16
+ * @version 0.7
  *
  */
 public class Chat {
@@ -18,6 +18,7 @@ public class Chat {
 	private boolean m_canUsersTalk;
 	private LinkedList<Message> m_listOfMessages = new LinkedList<Message>();
 	private int m_messageNumber = 0; // the message number
+	final int DEFAULT_READ_AMOUNT = 25; // this is the initial amount of messages that is read to the database
 
 	public Chat(String chatLocation, boolean isChatElegable){
 		//this.m_chatLocation = new File(chatLocation);
@@ -141,7 +142,7 @@ public class Chat {
 			throw new Exception("This message is out of range"); 
 		}
 		else {
-			return this.getMessage(indexMessageNumber);
+			return this.m_listOfMessages.get(indexMessageNumber);
 		}
 	}
 	
@@ -196,7 +197,13 @@ public class Chat {
 	 */
 	public void loadChat(String Chat) throws FileNotFoundException{
 		ChatReader chat = new ChatReader(m_chatLocation);
-		this.m_listOfMessages = chat.readAll();
+		
+		try {
+			this.m_listOfMessages = chat.readSome(this.DEFAULT_READ_AMOUNT);
+		} catch (Exception e) {
+			throw new FileNotFoundException("Leathel file- " +
+		" This file was illegal and has thrown exeption.");
+		}
 	}
 	
 	/**
@@ -205,6 +212,16 @@ public class Chat {
 	 */
 	public int getChatSize(){
 		return this.m_listOfMessages.size();
+	}
+	
+	public String getFileAddressPath(int message) throws Exception{
+		if(this.getMessageType(message) != 'm'){
+			throw new Exception("This message is a non-media messaage");
+		}
+		else {
+			MediaMessage temp = (MediaMessage) this.getMessage(message);
+			return temp.getFileAddress();
+		}
 	}
 
 }
