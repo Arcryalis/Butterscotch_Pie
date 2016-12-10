@@ -25,8 +25,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 
-import login.*;
-
 /**
  * HomeGUI.java
  * @author Yiu Ting Lai
@@ -35,13 +33,11 @@ import login.*;
 public class HomeGUI {
 	// GUI Components
 	private JFrame m_frame;
-	private JButton m_btnSearch;
 	private JButton m_btnRequest;
 	private JLabel m_lblLoginUser;
 	private JButton m_btnLogoff;
 	private JScrollPane m_contactsPane;
 	private JList m_contactsList;
-	private ActionListener m_searchAction;
 	private ActionListener m_requestAction;
 	private ActionListener m_logoffAction;
 	private MouseListener m_contactMouse;
@@ -60,11 +56,11 @@ public class HomeGUI {
 	// Data Components
 	private String m_account;
 	private String[] m_contacts;
-	private int m_noOfRequest;
 	private int m_clicksCount = 0;
 	
-	
-	
+
+
+
 	/**
 	 * Create the application.
 	 */
@@ -91,30 +87,15 @@ public class HomeGUI {
 
 	}
 	
-	public void initializeData() {
+	private void initializeData() {
 		m_account = MainProgram.getM_ac().getUsername();
 		m_contacts = new String[MainProgram.getM_cl().size()];
 		for(int i = 0; i < m_contacts.length; i++) {
 			m_contacts[i] = ((Contact)MainProgram.getM_cl().get(i)).getM_username();
 		}
-		m_noOfRequest = MainProgram.getM_rl().size();
 	}
 	
 	private void initializeMainGUI() {
-		m_searchAction = new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				// Call to HomeGUI.search for check requests
-				System.out.println("m_requestAction: Clicked on: request button");
-				search();
-			}
-		};
-		
-		m_btnSearch = new JButton("");
-		m_btnSearch.setBounds(25, 6, 50, 45);
-		m_btnSearch.setIcon(new ImageIcon("res/search.png"));
-		m_btnSearch.addActionListener(m_searchAction);
-		
 		m_requestAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -124,17 +105,14 @@ public class HomeGUI {
 			}
 		};
 
-		m_btnRequest = new JButton(m_noOfRequest + "");
+		m_btnRequest = new JButton("0");
 		m_btnRequest.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		m_btnRequest.setIcon(new ImageIcon("res/newRequest.png"));
-		m_btnRequest.setBounds(82, 6, 100, 45);
+		m_btnRequest.setBounds(27, 6, 100, 45);
 		m_btnRequest.addActionListener(m_requestAction);
-		if(m_noOfRequest == 0) {
-			m_btnRequest.setEnabled(false);
-		}
 
 		m_lblLoginUser = new JLabel("Welcome, " + m_account);
-		m_lblLoginUser.setBounds(210, 21, 250, 20);
+		m_lblLoginUser.setBounds(150, 20, 250, 20);
 		
 		m_logoffAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -146,8 +124,7 @@ public class HomeGUI {
 		};
 
 		m_btnLogoff = new JButton("Log Off");
-		m_btnLogoff.setIcon(new ImageIcon("res/logout.png"));
-		m_btnLogoff.setBounds(658, 10, 117, 45);
+		m_btnLogoff.setBounds(670, 20, 117, 30);
 		m_btnLogoff.addActionListener(m_logoffAction);
 
 		m_contactMouse = new MouseAdapter() {
@@ -182,7 +159,6 @@ public class HomeGUI {
 		m_contactPanel = new JPanel();
 		m_contactPanel.setBounds(300, 55, 475, 500);
 		
-		m_frame.getContentPane().add(m_btnSearch);
 		m_frame.getContentPane().add(m_btnRequest);
 		m_frame.getContentPane().add(m_lblLoginUser);
 		m_frame.getContentPane().add(m_btnLogoff);
@@ -266,33 +242,11 @@ public class HomeGUI {
 	
 	
 	
-	public void search() {
-		System.out.println("search(): spawn a SearchGUI window");
-		
-		// call to SearchGUI to spawn a window for searching
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SearchGUI window = new SearchGUI();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
-	
-	
 	public void chkRequest() {
-		System.out.println("chkRequest(): spawn a RequestGUI window");
-		
-		HomeGUI me = this;
-		
-		// call to RequestGUI to spawn a window for searching
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RequestGUI window = new RequestGUI(me);
+					RequestGUI window = new RequestGUI();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
