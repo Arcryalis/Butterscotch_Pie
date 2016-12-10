@@ -2,6 +2,11 @@ import java.util.Date;
 import java.util.Scanner;
 /*
  * Signup lets a user add an account to the database
+ * @Author Tim Brook
+ * @Author Osian Smith
+ * @Version 1.2
+ * Change log:
+ * - 1. fixed misplaced bracket 
  */
 public class SignUp {
 	private String username;
@@ -21,7 +26,8 @@ public class SignUp {
 	public void validateSignup(String username){
 		if(username.compareTo(Account.getUsername(username)){
 			System.out.println("Please choose a diiferent username, the one you have chosen is taken");
-			else{
+		}
+		else{
 				Account.Account acc = new Account.Account(username, password, firstName, lastName, ukPhoneNo);
 			}
 				
