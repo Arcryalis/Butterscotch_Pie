@@ -1,4 +1,5 @@
-import java.awt.EventQueue;
+
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -17,16 +18,17 @@ import java.awt.Toolkit;
 
 public class SignupGUI extends GUI{
 
-	private JFrame frmSignUp;
-	private JTextField usernametxtfld;
-	private JPasswordField pwrdfld;
-	private JTextField fnametxtfld;
-	private JTextField lnametxtfld;
-	private JTextField phonenumtxtfld;
-	private JTextField dobtxtfld;
-	private JTextField citytxtfld;
-	private JButton btnCreateAccount;
-	private JButton btnCancel;
+	private JFrame m_frmSignUp;
+	private JTextField m_usernametxtfld;
+	private JPasswordField m_pwrdfld;
+	private JTextField m_fnametxtfld;
+	private JTextField m_lnametxtfld;
+	private JTextField m_phonenumtxtfld;
+	private JTextField m_dobtxtfld;
+	private JTextField m_citytxtfld;
+	private JButton m_btnCreateAccount;
+	private JButton m_btnCancel;
+	private JLabel m_lblLogo;
 
 	
 	public SignupGUI() {
@@ -38,12 +40,12 @@ public class SignupGUI extends GUI{
 	 * @wbp.parser.entryPoint
 	 */
 	protected void makeGUI() {
-		frmSignUp = new JFrame();
-		frmSignUp.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\src\\Skypertawe Icon.png"));
-		frmSignUp.setTitle("Sign Up");
-		frmSignUp.getContentPane().setSize(600, 600);;
-		setVisible(frmSignUp, true);
-		frmSignUp.getContentPane().setBackground(new Color(0, 238, 190));
+		m_frmSignUp = new JFrame();
+		m_frmSignUp.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\src\\Skypertawe Icon.png"));
+		m_frmSignUp.setTitle("Sign Up");
+		m_frmSignUp.getContentPane().setSize(600, 600);;
+		setVisible(m_frmSignUp, true);
+		m_frmSignUp.getContentPane().setBackground(new Color(0, 238, 190));
 		
 		JLabel lblUsername = new JLabel("Username");
 		
@@ -59,45 +61,46 @@ public class SignupGUI extends GUI{
 		
 		JLabel lblCity = new JLabel("City");
 		
-		usernametxtfld = new JTextField();
-		usernametxtfld.setColumns(10);
+		m_usernametxtfld = new JTextField();
+		m_usernametxtfld.setColumns(10);
 		
-		pwrdfld = new JPasswordField();
+		m_pwrdfld = new JPasswordField();
 		
-		fnametxtfld = new JTextField();
-		fnametxtfld.setColumns(10);
+		m_fnametxtfld = new JTextField();
+		m_fnametxtfld.setColumns(10);
 		
-		lnametxtfld = new JTextField();
-		lnametxtfld.setColumns(10);
+		m_lnametxtfld = new JTextField();
+		m_lnametxtfld.setColumns(10);
 		
-		phonenumtxtfld = new JTextField();
-		phonenumtxtfld.setColumns(10);
+		m_phonenumtxtfld = new JTextField();
+		m_phonenumtxtfld.setColumns(10);
 		
-		dobtxtfld = new JTextField();
-		dobtxtfld.setColumns(10);
+		m_dobtxtfld = new JTextField();
+		m_dobtxtfld.setColumns(10);
 		
-		citytxtfld = new JTextField();
-		citytxtfld.setColumns(10);
+		m_citytxtfld = new JTextField();
+		m_citytxtfld.setColumns(10);
 		
-		btnCreateAccount = new JButton("Create Account");
-		btnCreateAccount.addActionListener(new ActionListener() {
+		m_btnCreateAccount = new JButton("Create Account");
+		m_btnCreateAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String uname = usernametxtfld.getText();
-				String pwrd = pwrdfld.getPassword().toString();
-				String fname = fnametxtfld.getText();
-				String lname = lnametxtfld.getText();
-				String phonenum = phonenumtxtfld.getText();
+				String uname = m_usernametxtfld.getText();
+				String fname = m_fnametxtfld.getText();
+				String lname = m_lnametxtfld.getText();
+				String phonenum = m_phonenumtxtfld.getText();
 				//String dob = usernametxtfld.getText();
 				//String city = usernametxtfld.getText();
-				if(uname.equals("") || pwrdfld.getPassword().length == 0|| fname.equals("")|| lname.equals("") || phonenum.equals("")){
+				if(uname.equals("") || m_pwrdfld.getPassword().length == 0|| fname.equals("")|| lname.equals("") || phonenum.equals("")){
 					JOptionPane.showMessageDialog(null, "Please enter all fields");
 
 				}
 
 				else {
-					new Account(uname, pwrd, fname, lname, phonenum);
-					frmSignUp.dispose();
+					
+					//write(new account(..))
+					//new AccountReader().write(new Account(uname, pwrd, fname, lname, phonenum));
+					m_frmSignUp.dispose();
 					JOptionPane.showMessageDialog(null, "Account Created");
 					new LoginGUI().displayGUI();
 				}
@@ -105,87 +108,101 @@ public class SignupGUI extends GUI{
 			}
 		});
 		
-		btnCancel = new JButton("Cancel");
-		btnCancel.addActionListener(new ActionListener() {
+		m_btnCancel = new JButton("Cancel");
+		m_btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frmSignUp.dispose();
+				m_frmSignUp.dispose();
 				new LoginGUI().displayGUI();
 			}
 		});
-		GroupLayout groupLayout = new GroupLayout(frmSignUp.getContentPane());
+		
+		m_lblLogo = new JLabel("");
+		Image logo = new ImageIcon(this.getClass().getResource("/Skypertawe Logo.png")).getImage();
+		m_lblLogo.setIcon(new ImageIcon(logo));
+		
+		
+		
+		GroupLayout groupLayout = new GroupLayout(m_frmSignUp.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(21)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblLastname)
-						.addComponent(lblPassword)
-						.addComponent(lblUsername)
-						.addComponent(lblUkPhoneNumber)
-						.addComponent(lblDateOfBirth)
-						.addComponent(lblFirstname)
-						.addComponent(lblCity))
+					.addGap(31)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(23)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(phonenumtxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblPassword)
+								.addComponent(lblUsername)
+								.addComponent(lblFirstname)
+								.addComponent(lblLastname)
+								.addComponent(lblDateOfBirth)
+								.addComponent(lblCity))
+							.addGap(38)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(citytxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(dobtxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addGap(43)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(btnCancel)
-										.addComponent(btnCreateAccount)))))
-						.addComponent(fnametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lnametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(pwrdfld, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-						.addComponent(usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(78))
+									.addComponent(m_btnCreateAccount)
+									.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+									.addComponent(m_btnCancel)
+									.addGap(35))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(m_pwrdfld, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+										.addComponent(m_usernametxtfld, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+										.addComponent(m_fnametxtfld, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+										.addComponent(m_lnametxtfld, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+										.addComponent(m_phonenumtxtfld, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+										.addComponent(m_dobtxtfld, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+										.addComponent(m_citytxtfld, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+									.addPreferredGap(ComponentPlacement.RELATED))))
+						.addComponent(lblUkPhoneNumber))
+					.addGap(51))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(110, Short.MAX_VALUE)
+					.addComponent(m_lblLogo, GroupLayout.PREFERRED_SIZE, 264, GroupLayout.PREFERRED_SIZE)
+					.addGap(60))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(53)
+					.addContainerGap()
+					.addComponent(m_lblLogo)
+					.addGap(51)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(m_usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblUsername))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPassword)
+						.addComponent(m_pwrdfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblFirstname)
+						.addComponent(m_fnametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(25)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblLastname)
+						.addComponent(m_lnametxtfld, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+					.addGap(34)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblUkPhoneNumber)
+						.addComponent(m_phonenumtxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(28)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblUsername)
-								.addComponent(usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPassword)
-								.addComponent(pwrdfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblFirstname)
-								.addComponent(fnametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblLastname)
-								.addComponent(lnametxtfld, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblUkPhoneNumber)
-								.addComponent(phonenumtxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblDateOfBirth)
-								.addComponent(dobtxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(btnCancel))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(citytxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnCreateAccount))
-						.addComponent(lblCity))
-					.addContainerGap(35, Short.MAX_VALUE))
+						.addComponent(lblDateOfBirth)
+						.addComponent(m_dobtxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblCity)
+						.addComponent(m_citytxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(m_btnCancel)
+						.addComponent(m_btnCreateAccount))
+					.addGap(34))
 		);
-		frmSignUp.getContentPane().setLayout(groupLayout);
-		frmSignUp.setBounds(100, 100, 450, 322);
+		m_frmSignUp.getContentPane().setLayout(groupLayout);
+		m_frmSignUp.setBounds(100, 100, 450, 530);
 		
-		frmSignUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		m_frmSignUp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static void main(String[] args) {

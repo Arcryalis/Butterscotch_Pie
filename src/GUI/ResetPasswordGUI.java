@@ -1,4 +1,4 @@
-import java.awt.EventQueue;
+
 import java.awt.Image;
 
 import javax.swing.JFrame;
@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JPanel;
+
 
 public class ResetPasswordGUI extends GUI{
 
@@ -94,7 +94,7 @@ public class ResetPasswordGUI extends GUI{
 		opwrdfld = new JPasswordField();
 		
 		JLabel lblLogo = new JLabel("");
-		Image logo = new ImageIcon(this.getClass().getResource("/ss.png")).getImage();
+		Image logo = new ImageIcon(this.getClass().getResource("/Skypertawe Logo.png")).getImage();
 		lblLogo.setIcon(new ImageIcon(logo));
 		
 		GroupLayout groupLayout = new GroupLayout(frmResetPassword.getContentPane());
