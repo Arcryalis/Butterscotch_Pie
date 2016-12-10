@@ -22,7 +22,7 @@ public class SignUp {
 	 * @param username, the name they have chosen
 	 */
 	public void validateSignup(String username){
-		if(username.compareTo(Account.getUsername(username)) {
+		if(username.compareTo(Account.getUsername(username))) {
 			System.out.println("Please choose a diiferent username, the one you have chosen is taken");
 			
 		}
