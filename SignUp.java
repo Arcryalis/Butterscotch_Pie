@@ -5,8 +5,6 @@ import java.util.Scanner;
  * @Author Tim Brook
  * @Author Osian Smith
  * @Version 1.2
- * Change log:
- * - 1. fixed misplaced bracket 
  */
 public class SignUp {
 	private String username;
