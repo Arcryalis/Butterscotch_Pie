@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -11,6 +12,15 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Osian 
+ * @author Sev
+ * @author Rhydian
+ * @version 2
+ * @Date 10 12 16
+ *
+ */
 public class StraightLine extends JPanel {
 
 	public static void main(String args[]) {
@@ -41,7 +51,8 @@ public class StraightLine extends JPanel {
 		
 		if(m_StartPoints[i] == null){
 			i = m_StartPoints.length;
-		}else{
+		}
+		else {
 			for(i = 0; i < m_StartPoints.length; i++){
 				g.drawLine(m_StartPoints[i].x, m_StartPoints[i].y, m_EndPoints[i].x, m_EndPoints[i].y);
 			}
@@ -54,15 +65,11 @@ public class StraightLine extends JPanel {
 	}
 
 	public int increasePointCount() {
-		m_PointCount++;
-		return m_PointCount;
+		return m_PointCount++;
 	}
 
 	public boolean setPoint(Point point) {
-		boolean test = false;
-		if (test) {
-			System.out.println("DrawElement::setPoint()" + m_PointCount + ", " + point.toString());
-		}
+		
 		m_StartPoints[getPointCount()] = point;
 		return true;
 	}
@@ -70,18 +77,11 @@ public class StraightLine extends JPanel {
 	private class PaintHandler implements MouseListener, MouseMotionListener {
 
 		public void mousePressed(MouseEvent e) {
-			boolean test = true;
-			if (test) {
-				System.out.println("PaintHandler::mousePressed() " + e.toString());
-			}
+			
 		}
 
 		public void mouseMoved(MouseEvent e) {
-			boolean test = false;
-			if (test) {
-				System.out.println("PaintHandler::mouseMoved() " + e.toString());
 
-			}
 		}
 
 		public void mouseDragged(MouseEvent e) {
@@ -96,11 +96,6 @@ public class StraightLine extends JPanel {
 		}
 
 		public void mouseClicked(MouseEvent e) {
-			boolean test = true;
-			if (test) {
-				System.out.println("PaintHandler::mouseClicked() " + e.toString());
-			}
-			
 			m_prevPoint = e.getPoint();
 			m_StartPoints[m_PointCount] = m_prevPoint ;
 			if(m_StartPoints.length > m_EndPoints.length){
@@ -115,18 +110,11 @@ public class StraightLine extends JPanel {
 		}
 
 		public void mouseEntered(MouseEvent e) {
-			boolean test = true;
-			if (test) {
-				System.out.println("PaintHandler::mouseEntered() " + e.toString());
-			}
+		
 		}
 
 		public void mouseExited(MouseEvent e) {
-			boolean test = true;
-			if (test) {
-				System.out.println("PaintHandler::mouseExited() " + e.toString());
-			}
-
+			
 		}
 	}
 
