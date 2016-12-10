@@ -4,8 +4,8 @@ package chat;
 /**
  * This is the Text message class
  * @author Osian
- * @version 0.6
- * date 28/11/16
+ * @version 0.7
+ * date 10/12/16
  */
 
 public class TextMessage extends Message {
@@ -32,8 +32,19 @@ public class TextMessage extends Message {
 	public String getMessage() {
 		return m_message;
 	}
+	/**
+	 * Displays the message 
+	 */
 	public void display() {
 		System.out.println(m_message);
+	}
+	
+	
+	/**
+	 * This returns a string of the message 
+	 */
+	public String getMessageContent() {
+		return this.m_message;
 	}
 	
 	

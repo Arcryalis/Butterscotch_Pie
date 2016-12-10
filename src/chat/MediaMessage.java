@@ -68,16 +68,20 @@ public class MediaMessage extends Message {
 		m_Description = discription;
 	}
 
+	/**
+	 * This gets the message content
+	 */
 	@Override
-	public void display() {
-		System.out.println(m_Description);
-		System.out.println(m_file.toString());
+	public String getMessageContent() {
+		return this.m_file.toString();
 		
 	}
 	
 	public String getFileAddress(){
 		return this.m_file.getAbsolutePath();
 	}
+
+
 	
 
 }

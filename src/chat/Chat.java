@@ -10,7 +10,7 @@ import filereader.ChatReader;
  * any interactation that the GUI would do with Chat
  * @author Osian 
  * @date 10 12 16
- * @version 0.7
+ * @version 0.8
  *
  */
 public class Chat {
@@ -191,11 +191,16 @@ public class Chat {
 	}
 	
 	/**
-	 * This method loads in the chat from memory from a specific file.
+	 * This method loads in the chat from memory from a specific file of the default amount
 	 * @param Chat The File that contains the chat itself 
 	 * @throws FileNotFoundException  If file is not found this error is thrown
 	 */
 	public void loadChat(String Chat) throws FileNotFoundException{
+		this.loadChat(Chat, this.DEFAULT_READ_AMOUNT);
+	}
+	
+	public void loadChat(String Chat, int amountOfMessages) throws FileNotFoundException{
+		this.m_listOfMessages = null; // makes sure that the chat is cleared
 		ChatReader chat = new ChatReader(m_chatLocation);
 		
 		try {
@@ -214,6 +219,12 @@ public class Chat {
 		return this.m_listOfMessages.size();
 	}
 	
+	/**
+	 * This gets the fileAddress path from the object
+	 * @param message The message that you want to find the file message for
+	 * @return char of type 
+	 * @throws Exception  throws exeptuon if the message is a media type
+	 */
 	public String getFileAddressPath(int message) throws Exception{
 		if(this.getMessageType(message) != 'm'){
 			throw new Exception("This message is a non-media messaage");

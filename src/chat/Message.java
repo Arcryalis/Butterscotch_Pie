@@ -5,7 +5,8 @@ import java.util.Date;
 /**
  * This is a message object  that contains general infomation about a message
  * @author Osian
- * @date 29/11/16
+ * @date 10/12/16
+ * @version 0.7
  *
  */
 public abstract class Message {
@@ -48,18 +49,13 @@ public abstract class Message {
 
 //eunumarated type 
 	
-
+	/**
+	 * Returns the date
+	 * @return date 
+	 */
 	public String getDateStamp() {
 		return m_time;
 	}
-
-
-
-	public String getTime() {
-		return m_time;
-	}
-
-
 
 	public String getSender() {
 		return m_sender;
@@ -77,7 +73,7 @@ public abstract class Message {
 	}
 	
 	
-	public abstract void display();
+	public abstract String getMessageContent();
 	
 		
 	}
