@@ -1,39 +1,34 @@
 import java.awt.Color;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * 
- * @author Osian 
- * @author Sev
- * @author Rhydian
- * @version 2
- * @Date 10 12 16
- *
- */
 public class DrawElement extends JPanel {
 
 	public int getThickness() {
 		return m_Thickness;
 	}
 
-	public void setThickness(int thickness) {
-		this.m_Thickness = thickness;
+	public void setThickness(int m_Thickness) {
+		this.m_Thickness = m_Thickness;
 	}
 
 	public Color getColour() {
 		return m_Colour;
 	}
 
-	public void setColour(Color colour) {
-		this.m_Colour = colour;
+	public void setColour(Color m_Colour) {
+		this.m_Colour = Color.red;
 	}
 
 	public int getPointCount() {
@@ -41,25 +36,23 @@ public class DrawElement extends JPanel {
 	}
 
 	public int increasePointCount() {
-		return m_PointCount ++;
+		m_PointCount++;
+		return m_PointCount;
 	}
 
 	public Point[] getPoints() {
 		return m_Points;
 	}
 
-	public void setPoint(Point point) {
-		
-	
+	public boolean setPoint(Point point) {
+		System.out.println("DrawElement::setPoint()" + m_PointCount + ", " + point.toString());
+
 		m_Points[getPointCount()] = point;
-	
+		return true;
 	}
 
 	public DrawElement() {
-
-		boolean test = false;
-	
-
+		
 		PaintHandler handler = new PaintHandler();
 		this.addMouseListener(handler);
 		this.addMouseMotionListener(handler);
@@ -68,6 +61,9 @@ public class DrawElement extends JPanel {
 	public void paintComponent(Graphics g) {
 
 		boolean test = false;
+		if (test) {
+			System.out.println("PaintPanel::paintComponent() " + g.toString());
+		}
 
 		g.setColor(Color.red);
 		super.paintComponent(g);
@@ -100,27 +96,27 @@ public class DrawElement extends JPanel {
 		}
 
 		public void mouseMoved(MouseEvent event) {
-		
+			System.out.println("PaintHandler::mouseMoved() " + event.toString());
 		}
 
 		public void mouseEntered(MouseEvent event) {
-		
+			System.out.println("PaintHandler::mouseEntered() " + event.toString());
 		}
 
 		public void mouseExited(MouseEvent event) {
-		
+			System.out.println("PaintHandler::mouseExited() " + event.toString());
 		}
 
 		public void mouseClicked(MouseEvent event) {
-			
+			System.out.println("PaintHandler::mouseClicked() " + event.toString());
 		}
 
 		public void mousePressed(MouseEvent event) {
-			
+			System.out.println("PaintHandler::mousePresses() " + event.toString());
 		}
 
 		public void mouseReleased(MouseEvent event) {
-		
+			System.out.println("PaintHandler::mouseReleased() " + event.toString());
 		}
 
 	}

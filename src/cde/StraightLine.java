@@ -1,5 +1,4 @@
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -9,18 +8,11 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * 
- * @author Osian 
- * @author Sev
- * @author Rhydian
- * @version 2
- * @Date 10 12 16
- *
- */
 public class StraightLine extends JPanel {
 
 	public static void main(String args[]) {
@@ -33,7 +25,7 @@ public class StraightLine extends JPanel {
 		cde.setResizable(false);
 		cde.setVisible(true);
 	}
-
+	
 	//Constructor
 	public StraightLine() {
 
@@ -43,86 +35,60 @@ public class StraightLine extends JPanel {
 
 	}
 
-	//
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.RED);
-		int i = 0;
 		
-		if(m_StartPoints[i] == null){
-			i = m_StartPoints.length;
-		}
-		else {
-			for(i = 0; i < m_StartPoints.length; i++){
-				g.drawLine(m_StartPoints[i].x, m_StartPoints[i].y, m_EndPoints[i].x, m_EndPoints[i].y);
-			}
+		for(int i = 0; i < m_StartPoints.size(); i++){
+			Point startPoints = m_StartPoints.get(i);
+			Point endPoints = m_EndPoints.get(i);
+			
+			g.drawLine(startPoints.x, startPoints.y, endPoints.x, endPoints.y);
 		}
 		
 	}
-	
-	public int getPointCount() {
-		return m_PointCount;
-	}
-
-	public int increasePointCount() {
-		return m_PointCount++;
-	}
-
-	public boolean setPoint(Point point) {
-		
-		m_StartPoints[getPointCount()] = point;
-		return true;
-	}
-
 	private class PaintHandler implements MouseListener, MouseMotionListener {
 
 		public void mousePressed(MouseEvent e) {
-			
+			System.out.println("PaintHandler::mousePressed() " + e.toString());
 		}
 
-		public void mouseMoved(MouseEvent e) {
-
-		}
+		public void mouseMoved(MouseEvent e) {}
 
 		public void mouseDragged(MouseEvent e) {
-			
+			System.out.println("PaintHandler::mouseDragged() " + e.toString());
 		}
 		
 		public void mouseReleased(MouseEvent e) {
-			Point endPoint = e.getPoint();
-			m_EndPoints[m_PointCount] = endPoint;
-			increasePointCount();
-
+			System.out.println("PaintHandler::mouseReleased() " + e.toString());
 		}
 
 		public void mouseClicked(MouseEvent e) {
-			m_prevPoint = e.getPoint();
-			m_StartPoints[m_PointCount] = m_prevPoint ;
-			if(m_StartPoints.length > m_EndPoints.length){
+			System.out.println("PaintHandler::mouseClicked() " + e.toString());
+			if (m_StartPoints.size() == m_EndPoints.size()){
+				m_StartPoints.add(e.getPoint());
+			}else {
 				m_currPoint  = e.getPoint();
+				m_EndPoints.add(m_currPoint);
+				
 			}
+			repaint();
 			
-			/*
-			System.out.println(e.getPoint());
-			Point currPoint = e.getPoint();
-			m_StartPoints[m_PointCount] = currPoint ;
-			repaint();*/
 		}
 
 		public void mouseEntered(MouseEvent e) {
-		
+			System.out.println("PaintHandler::mouseEntered() " + e.toString());
+			
 		}
 
 		public void mouseExited(MouseEvent e) {
-			
+			System.out.println("PaintHandler::mouseExited() " + e.toString());
 		}
 	}
 
 	
 	private Point m_currPoint;
 	private Point m_prevPoint;
-	private int m_PointCount = 0;
-	private final int MAX_POINTS = 100000;
-	private Point m_StartPoints[] = new Point[MAX_POINTS];
-	private Point m_EndPoints[] = new Point[MAX_POINTS];
+	private List<Point> m_StartPoints = new ArrayList<Point>();
+	private List<Point> m_EndPoints = new ArrayList<Point>();
 }
