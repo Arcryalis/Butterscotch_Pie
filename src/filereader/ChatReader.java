@@ -110,7 +110,7 @@ public class ChatReader extends FileReader {
 		line += String.format(CONVERT_FORMAT, message.getDateStamp()) + DELIMITER;
 
 		line += MESSAGE_TYPE + EQUALS;
-		
+
 		String msgType = String.valueOf(message.getMessageType());
 		line += String.format(CONVERT_FORMAT, msgType) + DELIMITER;
 
@@ -192,58 +192,55 @@ public class ChatReader extends FileReader {
 
 	private String convertToFileString(Message message) {
 		String line = OPEN_VALUES;
-
-		try {
-
-
-			line += String.format(CONVERT_FORMAT, message.getSender()) + DELIMITER;
-			line += String.format(CONVERT_FORMAT, message.getDateStamp()) + DELIMITER;
-			line += String.format(CONVERT_FORMAT, message.getMessageType()) + DELIMITER;
-			line += String.format(CONVERT_FORMAT, message.getMessageContent()) + DELIMITER;
-			if(message.getMessageType() == 'm'){
-				line += String.format(CONVERT_FORMAT, ((MediaMessage) message).getDescription()) + DELIMITER;
-			}
-			else{
-				line += "";
-			}
-
-			return line;
+		line += String.format(CONVERT_FORMAT, message.getSender()) + DELIMITER;
+		line += String.format(CONVERT_FORMAT, message.getDateStamp()) + DELIMITER;
+		line += String.format(CONVERT_FORMAT, message.getMessageType()) + DELIMITER;
+		line += String.format(CONVERT_FORMAT, message.getMessageContent()) + DELIMITER;
+		if(message.getMessageType() == 'm'){
+			line += String.format(CONVERT_FORMAT, ((MediaMessage) message).getDescription()) + DELIMITER;
+		}
+		else{
+			line += "";
 		}
 
-		//Attributes
-		private final String m_chatName;
 
-		//Constants
-		/** The filepath for the accounts file */
-		private static final String FILEPATH = "jdbc:mysql://localhost:3306/cstest";
-
-		/**	Represents the line as a text message */
-		private static final String TEXT = "t";
-		/**	Represents the line as a media message */
-		private static final String MEDIA = "m";
-
-		/** Name of the char table's attribute for message number */
-		private static final String MSG_NUM = "messagenum";	
-		/** Name of the char table's attribute for sender */
-		private static final String SENDER = "sender";	
-		/** Name of the char table's attribute for time sent */
-		private static final String TIME_SENT = "timesent";	
-		/** Name of the char table's attribute for message type */
-		private static final String MESSAGE_TYPE = "messagetype";	
-		/** Name of the char table's attribute for message */
-		private static final String MESSAGE = "message";	
-		/** Name of the char table's attribute for description */
-		private static final String DESCRIPTION = "description";	
-
-		/** Query used for the read() operation */
-		private static final String READ_SOME_QUERY = 	"select * " + 
-				"from %s " +
-				"where " + MSG_NUM + ">= %d;";
-		/** Query used for the getNewestMsgNum() operation */
-		private static final String NEW_NUM_QUERY = 	"select max(" + MSG_NUM + ") " +
-				"from %s;";
-		//Query used to geneerate a new  write query
-		private static final String WRITE_QUERY =	"insert into %s values ";
-
-
+		return line;
 	}
+
+	//Attributes
+	private final String m_chatName;
+
+	//Constants
+	/** The filepath for the accounts file */
+	private static final String FILEPATH = "jdbc:mysql://localhost:3306/cstest";
+
+	/**	Represents the line as a text message */
+	private static final String TEXT = "t";
+	/**	Represents the line as a media message */
+	private static final String MEDIA = "m";
+
+	/** Name of the char table's attribute for message number */
+	private static final String MSG_NUM = "messagenum";	
+	/** Name of the char table's attribute for sender */
+	private static final String SENDER = "sender";	
+	/** Name of the char table's attribute for time sent */
+	private static final String TIME_SENT = "timesent";	
+	/** Name of the char table's attribute for message type */
+	private static final String MESSAGE_TYPE = "messagetype";	
+	/** Name of the char table's attribute for message */
+	private static final String MESSAGE = "message";	
+	/** Name of the char table's attribute for description */
+	private static final String DESCRIPTION = "description";	
+
+	/** Query used for the read() operation */
+	private static final String READ_SOME_QUERY = 	"select * " + 
+			"from %s " +
+			"where " + MSG_NUM + ">= %d;";
+	/** Query used for the getNewestMsgNum() operation */
+	private static final String NEW_NUM_QUERY = 	"select max(" + MSG_NUM + ") " +
+			"from %s;";
+	//Query used to geneerate a new  write query
+	private static final String WRITE_QUERY =	"insert into %s values ";
+
+
+}
