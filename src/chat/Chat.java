@@ -10,18 +10,19 @@ import filereader.ChatReader;
  * any interactation that the GUI would do with Chat
  * @author Osian 
  * @date 10 12 16
- * @version 0.8
+ * @version 0.9
  *
  */
 public class Chat {
 	private String m_chatLocation;
+	private ChatReader chatDB;
 	private boolean m_canUsersTalk;
 	private LinkedList<Message> m_listOfMessages = new LinkedList<Message>();
 	private int m_messageNumber = 0; // the message number
 	final int DEFAULT_READ_AMOUNT = 25; // this is the initial amount of messages that is read to the database
 
 	public Chat(String chatLocation, boolean isChatElegable){
-		//this.m_chatLocation = new File(chatLocation);
+		chatDB = new ChatReader(chatLocation);
 		this.m_canUsersTalk = isChatElegable;
 
 	}
@@ -74,6 +75,7 @@ public class Chat {
 	public void newTextMessage(String message, String sender){
 		Message load =  new TextMessage(message, sender);
 		this.m_listOfMessages.add(load);
+		this.saveChat(load);
 		this.m_messageNumber ++;
 		
 	}
@@ -100,14 +102,16 @@ public class Chat {
 	 * @throws Exception If message is too long Excpetion is thrown  - @See MediaMessage
 	 */
 	public void newMediaMessage(File message, String discription, String sender) throws Exception {
+		Message load =  new MediaMessage(message,discription,sender);
 		try {
-			Message load =  new MediaMessage(message,discription,sender);
+			
 			this.m_listOfMessages.add(load);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("Lenght of the description is too long");
 			
 		}
+		this.saveChat(load);
 		this.m_messageNumber ++;
 	}
 	
@@ -186,8 +190,18 @@ public class Chat {
 		}
 	}
 	
-	public void saveChat(){
-		//some code will go here once I have access to the database
+	/**
+	 * This saves a chat to the database 
+	 * @param chat Message that is being saved
+	 */
+	private void saveChat(Message chat){
+		
+		try {
+			this.chatDB.wrie(chat);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
