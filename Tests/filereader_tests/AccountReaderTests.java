@@ -1,6 +1,9 @@
 package filereader_tests;
 
 import static org.junit.Assert.*;
+
+import java.util.Date;
+
 import org.junit.Test;
 
 import filereader.AccountReader;
@@ -8,7 +11,7 @@ import login.Account;
 
 public class AccountReaderTests {
 	
-	private static final Account FIRST_ACCOUNT = new Account("Sev", "p1", "f.name 1", "s.name 1", "1792");
+	private static final Account FIRST_ACCOUNT = new Account("Sev", "p2", "f.name 1", "s.name 1", "1792");
 	private static final Account SECOND_ACCOUNT = new Account("u1", "p1", "f.name 1", "s.name 1", "01792");
 	private static final Account THIRD_ACCOUNT = new Account("user.t", "pass.t", "f.t.names", "s.t.names", "2016.t");
 
@@ -33,7 +36,7 @@ public class AccountReaderTests {
 		AccountReader reader = new AccountReader();
 		
 		try {
-			assertEquals(SECOND_ACCOUNT.getUsername(), reader.read().get(0).getUsername());
+			assertEquals(FIRST_ACCOUNT.getUsername(), reader.read().peek().getUsername());
 		} catch (Exception e) {
 			System.out.println(e + " FAIL Test1b");
 		}
@@ -55,7 +58,7 @@ public class AccountReaderTests {
 		}
 		
 		try {
-			reader.delete(testAccount);
+			reader.delete(testAccount.getUsername());
 		} catch (Exception e) {
 			System.out.println(e + "FAIL Test2a delete");
 		}
@@ -69,7 +72,10 @@ public class AccountReaderTests {
 		AccountReader reader = new AccountReader();
 		
 		Account testAccount = SECOND_ACCOUNT;
+		testAccount.setDob(new Date());
 		testAccount.setCity("New world");
+		testAccount.setProfilePic("Mrglglgl.pic");
+		testAccount.setDtLastLogin(new Date());
 		
 		try {
 			reader.update(testAccount);
@@ -78,4 +84,21 @@ public class AccountReaderTests {
 		}
 
 	}
+	
+	/**
+	 * Tests checkUserPass()
+	 */
+	@Test  
+    public void Test4a () {
+		AccountReader reader = new AccountReader();
+		
+		try {
+			assertEquals(reader.checkUserPass("Sev","p2"), true);
+		} catch (Exception e) {
+			System.out.println(e + "FAIL Test3a update");
+		}
+
+	}
+	
+	
 }

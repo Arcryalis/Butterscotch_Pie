@@ -47,7 +47,6 @@ public class AccountReader extends FileReader {
 			ResultSet result = statement.executeQuery(query);  
 			
 			while(result.next()){
-				
 				accountList.add(readLine(result));
 			}
 			
@@ -60,8 +59,8 @@ public class AccountReader extends FileReader {
 		}
 		
 		return accountList;
-	}
-		
+	}	
+	
 	/**
 	 * Appends a new account to the account table.
 	 * @param account The account to be added
@@ -90,14 +89,14 @@ public class AccountReader extends FileReader {
 	
 	/**
 	 * Deletes an account from the account table.
-	 * @param removeAccount The account to delete
+	 * @param accountUsername The account to delete
 	 * @throws Exception
 	 */
-	public void delete(Account removeAccount) throws Exception {		
+	public void delete(String accountUsername) throws Exception {		
 		try{
 			openSQL();
 			
-			String query = String.format(DELETE_QUERY, removeAccount.getUsername());
+			String query = String.format(DELETE_QUERY, accountUsername);
 			Statement statement = m_connection.createStatement();  
 			statement.executeUpdate(query);  
 			
@@ -169,11 +168,43 @@ public class AccountReader extends FileReader {
 		}
 	}
 	
+	/**
+	 * Checks if a username and password are present together in the table
+	 * @param username The username to check
+	 * @param password The password to check
+	 * @return True if pair are present, False otherwise.
+	 */
+	public Boolean checkUserPass(String username, String password) throws Exception {
+		
+		String query = String.format(CHECK_USER_PASS_QUERY, username, password);
+		
+		try{
+			openSQL();
+			
+			Statement statement = m_connection.createStatement();  
+			ResultSet result = statement.executeQuery(query);  
+			
+			//if line present
+			if (result.next() == true){
+				return true;
+			//line not present, login does not exit
+			} else {
+				return false;
+			}
+
+		}catch(SQLException e){ 
+			throw new SQLException(SQL_ERROR + e);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			closeSQL();
+		}
+	}
 	
 	//Private & Protected methods
 	/**
-	 * Reads the current line of the account file and converts it to an account.
-	 * @param fileIn The current file scanner being read from
+	 * Reads the current line of the account table and converts it to an account.
+	 * @param fileIn The current table being read from
 	 * @return An account initialised with data from the line read
 	 * @throws Exception
 	 */
@@ -190,7 +221,8 @@ public class AccountReader extends FileReader {
 
 			if (result.getString(DOB) != null){
 				SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-				account.setDob(sdf.parse(result.getString(DOB)));
+				Date dob = sdf.parse(result.getString(DOB));
+				account.setDob(dob);
 			}
 			
 			if (result.getString(CITY) != null){
@@ -203,7 +235,8 @@ public class AccountReader extends FileReader {
 			
 			if (result.getString(LAST_LOGIN) != null){
 				SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-				account.setDtLastLogin(sdf.parse(result.getString(LAST_LOGIN)));
+				Date lastLogin = sdf.parse(result.getString(LAST_LOGIN));
+				account.setDtLastLogin(lastLogin);
 			}
 			
 			return account;
@@ -232,8 +265,8 @@ public class AccountReader extends FileReader {
 
 		
 		if (account.getDob() != null) {
-			//SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-			//line += String.format(CONVERT_FORMAT, sdf.format(account.getDob())) + DELIMITER;
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			line += String.format(CONVERT_FORMAT, sdf.format(account.getDob())) + DELIMITER;
 		} else {
 			line += String.format(CONVERT_FORMAT, EMPTY) + DELIMITER;
 		}
@@ -244,14 +277,15 @@ public class AccountReader extends FileReader {
 			line += String.format(CONVERT_FORMAT, EMPTY) + DELIMITER;
 		}
 		
-		//if (account.getProfilePic() != null) {
-			//line += String.format(CONVERT_FORMAT, account.getProfilePic() "FIX ME") + DELIMITER;
-		//} else {
+		if (account.getProfilePic() != null) {
+			line += String.format(CONVERT_FORMAT, account.getProfilePic()) + DELIMITER;
+		} else {
 			line += String.format(CONVERT_FORMAT, EMPTY) + DELIMITER;
-		//}
+		}
 		
 		if (account.getDtLastLogin() != null) {
-			line += String.format(CONVERT_FORMAT, account.getDtLastLogin().toString());
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			line += String.format(CONVERT_FORMAT, sdf.format(account.getDtLastLogin()));
 		} else {
 			line += String.format(CONVERT_FORMAT, EMPTY);
 		}
@@ -303,7 +337,8 @@ public class AccountReader extends FileReader {
 		
 		line += LAST_LOGIN + EQUALS;
 		if (account.getDtLastLogin() != null) {
-			line += String.format(CONVERT_FORMAT, account.getDtLastLogin().toString());
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			line += String.format(CONVERT_FORMAT, sdf.format(account.getDtLastLogin()));
 		} else {
 			line += String.format(CONVERT_FORMAT, EMPTY);
 		}
@@ -351,5 +386,8 @@ public class AccountReader extends FileReader {
 	/** Query used for the read() operation */
 	private static final String TO_ACCOUNT_QUERY = 	"select * from account " + 
 													"where " + USERNAME + " = '%s';";
-	
+	/** Query used for the checkUserPass() operation */
+	private static final String CHECK_USER_PASS_QUERY = "select username, password " +
+														"from account " +
+														"where username = '%s' AND password = '%s';";
 }
