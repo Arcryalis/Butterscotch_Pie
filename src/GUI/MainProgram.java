@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 import java.util.LinkedList;
 
 import filereader.ContactsReader;
+import filereader.RoomReader;
 import login.*;
 
 /**
@@ -15,16 +16,19 @@ public class MainProgram {
 	private static Account m_ac;
 	private static ContactList m_cl;
 	private static RequestList m_rl;
+	private static RoomList m_crl;
 	
 	public static boolean isM_LoginState() {	return m_LoginState;	}
 	public static Account getM_ac() {			return m_ac;			}
 	public static ContactList getM_cl() {		return m_cl;			}
 	public static RequestList getM_rl() {		return m_rl;			}
+	public static RoomList getM_crl() {			return m_crl;			}
 
 	public static void setM_LoginState(boolean m_LoginState) {	MainProgram.m_LoginState = m_LoginState;	}
 	public static void setM_ac(Account m_ac) {					MainProgram.m_ac = m_ac;					}
 	public static void setM_cl(ContactList m_cl) {				MainProgram.m_cl = m_cl;					}
 	public static void setM_rl(RequestList m_rl) {				MainProgram.m_rl = m_rl;					}
+	public static void setM_crl(RoomList m_crl) {				MainProgram.m_crl = m_crl;					}
 	
 	public static void main(String[] args) throws ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
@@ -35,7 +39,8 @@ public class MainProgram {
 			public void run() {
 				try {
 					//LoginGUI window = new LoginGUI();
-					HomeGUI window = new HomeGUI();
+					LoginGUI window = new LoginGUI();
+					window.displayGUI();
 					//window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,7 +57,8 @@ public class MainProgram {
 			public void run() {
 				try {
 					//LoginGUI window = new LoginGUI();
-					HomeGUI window = new HomeGUI();
+					LoginGUI window = new LoginGUI();
+					window.displayGUI();
 					//window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -72,9 +78,7 @@ public class MainProgram {
 			}
 			
 		}catch(Exception e) {
-			for(int i = 2; i < 30; i++) {
-				m_cl.add(new Contact("NullAccount_" + i));
-			}
+			m_cl = new ContactList();
 		}
 	}
 	
@@ -89,10 +93,39 @@ public class MainProgram {
 			}
 			
 		}catch(Exception e) {
-			for(int i = 30; i < 40; i++) {
-				m_rl.add(new Request("NullAccount_" + i, true));
-			}
+			m_rl = new RequestList();
 		}
+	}
+	
+	public static void fetchRooms() {
+		try{
+			m_crl = new RoomList();
+			LinkedList<String> rooms = new RoomReader().getRoomsMemeberOf(m_ac.getUsername());
+			
+			for(int i = 0; i < rooms.size(); i++) {
+				String roomname = rooms.get(i);
+				String roomtype = new RoomReader().getRoomType(roomname);
+				LinkedList<String> namelist = new RoomReader().getRoomMemebers(roomname);
+				String[] names = new String[namelist.size()];
+				
+				System.out.println("Roomname: " + roomname);
+				System.out.println("Roomtype: " + roomtype);
+				
+				for(int j = 0; j < names.length; j++) {
+					names[j] = namelist.get(j);
+					System.out.println(names[j] + "");
+				}
+				
+				m_crl.add(new Room(roomname, roomtype, names));
+				
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			m_crl = new RoomList();
+		}
+		
+		
 	}
 	
 	public static void testStups() {
@@ -101,10 +134,12 @@ public class MainProgram {
 		m_ac = new Account("Sev", "p2", "Seven", "s.name 4", "59648");
 		m_cl = new ContactList();
 		m_rl = new RequestList();
+		m_crl = new RoomList();
 		m_LoginState = true;
 		
 		fetchContacts();
 		fetchRequests();
+		fetchRooms();
 		
 	}
 }

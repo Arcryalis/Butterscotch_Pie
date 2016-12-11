@@ -2,11 +2,16 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.EventQueue;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import filereader.AccountReader;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -36,7 +41,7 @@ public class LoginGUI extends GUI{
 	protected void makeGUI() {
 		m_frmLogIn = new JFrame();
 		setVisible(m_frmLogIn, true);
-		m_frmLogIn.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\src\\Skypertawe Icon.png"));
+		m_frmLogIn.setIconImage(Toolkit.getDefaultToolkit().getImage("/res/Skypertawe Icon.png"));
 		m_frmLogIn.getContentPane().setBackground(new Color(0, 238, 190));
 		
 		JLabel lblUsername = new JLabel("Username");
@@ -51,8 +56,8 @@ public class LoginGUI extends GUI{
 		m_btnLogIn = new JButton("Log In");
 		m_btnLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String uname = m_usernametxtfld.getText();
-				String pass = m_passwordpwrdfld.getPassword().toString();
+				String uname = m_usernametxtfld.getText().toString();
+				String pass = String.valueOf(m_passwordpwrdfld.getPassword());
 								
 				if(uname.equals("") || m_passwordpwrdfld.getPassword().length == 0){
 					JOptionPane.showMessageDialog(null, "Please complete all fields");
@@ -61,10 +66,13 @@ public class LoginGUI extends GUI{
 					try {
 						if(new AccountReader().checkUserPass(uname, pass)){
 							//homeGUI
-							JOptionPane.showMessageDialog(null, "HomeGUI");
+							login();
+							//JOptionPane.showMessageDialog(null, "HomeGUI");
 						}
 						else{
 							JOptionPane.showMessageDialog(null, "Incorrect Username/Password");
+							System.out.println("Username: " + uname);
+							System.out.println("Password: " + pass);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -90,7 +98,7 @@ public class LoginGUI extends GUI{
 		});
 		
 		m_lblLogo = new JLabel("");
-		Image logo = new ImageIcon(this.getClass().getResource("/Skypertawe Logo.png")).getImage();
+		Image logo = new ImageIcon(this.getClass().getResource("/res/skypertawelogo.png")).getImage();
 		m_lblLogo.setIcon(new ImageIcon(logo));
 		GroupLayout groupLayout = new GroupLayout(m_frmLogIn.getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -143,6 +151,27 @@ public class LoginGUI extends GUI{
 		m_frmLogIn.setTitle("Log in");
 		m_frmLogIn.setBounds(100, 100, 450, 300);
 		m_frmLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public void login() {
+		try{
+			MainProgram.setM_ac(new AccountReader().getAccount(m_usernametxtfld.getText()));
+		}catch(Exception e) {
+		}
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					//LoginGUI window = new LoginGUI();
+					HomeGUI window = new HomeGUI();
+					//window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		m_frmLogIn.dispose();
 	}
 	
 	public static void main(String[] args) {

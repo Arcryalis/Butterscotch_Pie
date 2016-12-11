@@ -45,12 +45,18 @@ public class HomeGUI {
 	private JButton m_btnRequest;
 	private JLabel m_lblLoginUser;
 	private JButton m_btnLogoff;
-	private JScrollPane m_contactsPane;
-	private JList m_contactsList;
+	private JScrollPane m_leftPane;
+	private JList m_leftJList;
+	private JButton m_btnContacts;
+	private JButton m_btnChats;
+	private JButton m_btnGroupChats;
 	private ActionListener m_searchAction;
 	private ActionListener m_requestAction;
 	private ActionListener m_logoffAction;
-	private MouseListener m_contactMouse;
+	private MouseListener m_leftMouse;
+	private ActionListener m_contactsAction;
+	private ActionListener m_chatsAction;
+	private ActionListener m_groupAction;
 
 	private JPanel m_contactPanel;
 	private JLabel m_lblImgProf;
@@ -59,16 +65,20 @@ public class HomeGUI {
 	private JLabel m_lblLastName;
 	private JLabel m_lblPhone;
 	private JButton m_btnSendMsg;
+	private JButton m_btnDraw;
 	private JButton m_btnRemove;
 	private ActionListener m_sendMsgAction;
+	private ActionListener m_whiteboardAction;
 	private ActionListener m_removeAction;
-
+	
+	private int guiState = 0;	//0: chat rooms; 	1: contacts;
+	
 	// Data Components
 	private String m_account;
 	private String[] m_contacts;
+	private String[] m_rooms;
 	private int m_noOfRequest;
 	private int m_clicksCount = 0;
-	
 	
 	
 	/**
@@ -96,25 +106,40 @@ public class HomeGUI {
 		
 		m_frame.getContentPane().add(m_lblTopBG);
 		m_frame.getContentPane().add(m_lblBottomBG);
-		
 		m_frame.setVisible(true);
 
 	}
 	
 	public void initializeData() {
 		m_account = MainProgram.getM_ac().getUsername();
+		
+		m_rooms = new String[MainProgram.getM_crl().size()];
+		
+		for(int i = 0; i < m_rooms.length; i++) {
+			m_rooms[i] = new String();
+			
+			for(int j = 0; j < ((Room)MainProgram.getM_crl().get(i)).getM_names().length; j++) {
+				if(! m_account.equals(((Room)MainProgram.getM_crl().get(i)).getM_names()[j])) {
+					m_rooms[i] += (((Room)MainProgram.getM_crl().get(i)).getM_names()[j] + " ");
+				}
+			}
+		}
+		
 		m_contacts = new String[MainProgram.getM_cl().size()];
+		
 		for(int i = 0; i < m_contacts.length; i++) {
 			m_contacts[i] = ((Contact)MainProgram.getM_cl().get(i)).getM_username();
 		}
+		
 		m_noOfRequest = MainProgram.getM_rl().size();
 	}
 	
 	private void initializeMainGUI() {
+		guiState = 0;
+		
 		m_lblTopBG = new JLabel("");
 		m_lblTopBG.setBounds(0, 0, 800, 365);
 		m_lblTopBG.setIcon(new ImageIcon("res/topbar.png"));
-		
 		m_lblBottomBG = new JLabel("");
 		m_lblBottomBG.setBounds(0, 450, 800, 140);
 		m_lblBottomBG.setIcon(new ImageIcon("res/bottombar.png"));
@@ -169,53 +194,101 @@ public class HomeGUI {
 		m_btnLogoff.setBounds(658, 10, 117, 45);
 		m_btnLogoff.addActionListener(m_logoffAction);
 
-		m_contactMouse = new MouseAdapter() {
+		m_leftMouse = new MouseAdapter() {
 			public void mouseClicked(MouseEvent mouseEvent) {
 				JList theList = (JList) mouseEvent.getSource();
 				int index = theList.locationToIndex(mouseEvent.getPoint());
 				Object o = theList.getModel().getElementAt(index);
-				if (mouseEvent.getClickCount() == 2) {
-					if (index >= 0) {
-						// Call to HomeGUI.sendMsg() for send message
-						System.out.println("m_contactMouse: Double-clicked on: " + o.toString());
-						sendMsg();
+				
+				if(guiState == 0) {
+					if (mouseEvent.getClickCount() == 2) {
+						if (index >= 0) {
+							// Call to HomeGUI.showContact() for show contact
+							System.out.println("m_leftMouse: Single-clicked on: " + o.toString());
+							sendMsg();
+						}
+						
 					}
-					
-				}else if (mouseEvent.getClickCount() == 1) {
-					if (index >= 0) {
-						// Call to HomeGUI.showContact() for show contact
-						System.out.println("m_contactMouse: Single-clicked on: " + o.toString());
-						showContact(index);
+				}else if (guiState == 1) {
+					if (mouseEvent.getClickCount() == 1) {
+						if (index >= 0) {
+							// Call to HomeGUI.showContact() for show contact
+							System.out.println("m_leftMouse: Single-clicked on: " + o.toString());
+							showContact(index);
+						}
+						
 					}
-					
 				}
 			}
 		};
 
-		m_contactsList = new JList(m_contacts);
-		m_contactsList.setBackground(new Color(224, 255, 255));
-		m_contactsList.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		m_contactsList.addMouseListener(m_contactMouse);
-		m_contactsPane = new JScrollPane(m_contactsList);
-		m_contactsPane.setBounds(25, 55, 250, 400);
+		m_leftJList = new JList(m_rooms);
+		m_leftJList.setBackground(new Color(224, 255, 255));
+		m_leftJList.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		m_leftJList.addMouseListener(m_leftMouse);
+		m_leftPane = new JScrollPane(m_leftJList);
+		m_leftPane.setBounds(25, 55, 250, 400);
 		
 		m_contactPanel = new JPanel();
 		m_contactPanel.setBackground(new Color(255, 255, 224));
 		m_contactPanel.setBounds(300, 55, 475, 500);
+		
+		m_contactsAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				// Call to HomeGUI.logoff for log off
+				System.out.println("m_contactsAction: Clicked on: switch gui into state 1: contacts");
+				switchState(1);
+			}
+		};
+		
+		m_btnContacts = new JButton("Contacts");
+		m_btnContacts.setBounds(25, 455, 120, 35);
+		m_btnContacts.addActionListener(m_contactsAction);
+		
+		m_chatsAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				// Call to HomeGUI.logoff for log off
+				System.out.println("m_chatsAction: Clicked on: switch gui into state 0: chat rooms");
+				switchState(0);
+			}
+		};
+		
+		m_btnChats = new JButton("Chat Rooms");
+		m_btnChats.setBounds(155, 455, 120, 35);
+		m_btnChats.addActionListener(m_chatsAction);
+		
+		m_groupAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				// Call to HomeGUI.logoff for log off
+				System.out.println("m_groupAction: Clicked on: call to group");
+				group();
+			}
+		};
+		
+		m_btnGroupChats = new JButton("New Group");
+		m_btnGroupChats.setBounds(25, 525, 120, 35);
+		m_btnGroupChats.addActionListener(m_groupAction);
+
 		m_frame.getContentPane().add(m_btnSearch);
 		m_frame.getContentPane().add(m_btnRequest);
 		m_frame.getContentPane().add(m_lblLoginUser);
 		m_frame.getContentPane().add(m_btnLogoff);
-		m_frame.getContentPane().add(m_contactsPane);
+		m_frame.getContentPane().add(m_leftPane);
+		m_frame.getContentPane().add(m_btnContacts);
+		m_frame.getContentPane().add(m_btnChats);
+		m_frame.getContentPane().add(m_btnGroupChats);
 		//m_frame.getContentPane().add(m_contactPanel);
 		
 	}
 	
 	private void initializeContactGUI() {
-		m_frame.getContentPane().add(m_contactPanel);
+		
 		m_contactPanel.setLayout(null);
 		
-		m_contactsList.setSelectedIndex(-1);
+		m_leftJList.setSelectedIndex(-1);
 		
 		m_lblImgProf = new JLabel();
 		m_lblImgProf.setBounds(5, 5, 250, 250);
@@ -226,15 +299,15 @@ public class HomeGUI {
 		m_lblUsername.setForeground(new Color(112, 128, 144));
 				
 		m_lblFirstName = new JLabel();
-		m_lblFirstName.setBounds(5, 350, 200, 20);
+		m_lblFirstName.setBounds(5, 320, 200, 20);
 		m_lblFirstName.setForeground(new Color(112, 128, 144));
 						
 		m_lblLastName = new JLabel();
-		m_lblLastName.setBounds(250, 350, 200, 20);
+		m_lblLastName.setBounds(250, 320, 200, 20);
 		m_lblLastName.setForeground(new Color(112, 128, 144));
 								
 		m_lblPhone = new JLabel();
-		m_lblPhone.setBounds(5, 400, 200, 20);
+		m_lblPhone.setBounds(5, 350, 200, 20);
 		m_lblPhone.setForeground(new Color(112, 128, 144));
 		
 		m_removeAction = new ActionListener() {
@@ -269,6 +342,19 @@ public class HomeGUI {
 		m_btnSendMsg.addActionListener(m_sendMsgAction);
 		m_btnSendMsg.setEnabled(false);
 		
+		m_whiteboardAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				// Call to HomeGUI.sendMsg for send message
+				System.out.println("m_sendMsgAction: Clicked on: send button");
+				whiteboard();
+			}
+		};
+		
+		m_btnDraw = new JButton("White Board");
+		m_btnDraw.setEnabled(false);
+		m_btnDraw.setBounds(270, 400, 200, 40);
+		
 		m_contactPanel.add(m_lblImgProf);
 		m_contactPanel.add(m_lblUsername);
 		m_contactPanel.add(m_lblFirstName);
@@ -276,8 +362,10 @@ public class HomeGUI {
 		m_contactPanel.add(m_lblPhone);
 		m_contactPanel.add(m_btnRemove);
 		m_contactPanel.add(m_btnSendMsg);
+		m_contactPanel.add(m_btnDraw);
 		
-		
+		m_contactPanel.setVisible(false);
+		m_frame.getContentPane().add(m_contactPanel);
 		
 	}
 	
@@ -331,6 +419,7 @@ public class HomeGUI {
 		
 		m_btnRemove.setEnabled(true);
 		m_btnSendMsg.setEnabled(true);
+		m_btnDraw.setEnabled(true);
 		m_frame.getContentPane().add(m_contactPanel);
 		
 		Account target;
@@ -340,7 +429,6 @@ public class HomeGUI {
 		}catch (Exception e){
 			target = new Account("NO NAME", "", "NULL", "NULL", "NULL");
 		}
-/**/		/**/
 		
 		m_lblPhone.setText(target.getUkPhoneNo());
 		m_lblFirstName.setText("First Name: " + target.getFirstName());
@@ -348,6 +436,7 @@ public class HomeGUI {
 		m_lblImgProf.setIcon(new ImageIcon("res/profileImg.png"));
 		
 		// Update window
+		m_contactPanel.setVisible(true);
 		m_frame.setVisible(true);
 		
 		return true;
@@ -355,9 +444,30 @@ public class HomeGUI {
 	
 	
 	public boolean sendMsg() {
-		int target = m_contactsList.getSelectedIndex();
+		int target = m_leftJList.getSelectedIndex();
+		
 		//Call to ChatGUI for send message
-		System.out.println("sendMsg: " + m_contacts[target]);
+		if(guiState == 0) {
+			System.out.println("sendMsg: " + m_rooms[target]);
+		}else if(guiState == 1) {
+			System.out.println("sendMsg: " + m_contacts[target]);
+		}
+		
+		
+		return true;
+	}
+	
+	
+	public boolean whiteboard() {
+		int target = m_leftJList.getSelectedIndex();
+		
+		//Call to ChatGUI for send message
+		if(guiState == 0) {
+			System.out.println("whiteboard: " + m_rooms[target]);
+		}else if(guiState == 1) {
+			System.out.println("whiteboard: " + m_contacts[target]);
+		}
+		
 		
 		return true;
 	}
@@ -366,7 +476,7 @@ public class HomeGUI {
 	
 	public boolean remove() {
 		
-		int target = m_contactsList.getSelectedIndex();
+		int target = m_leftJList.getSelectedIndex();
 		
 		int n = JOptionPane.showConfirmDialog(
 			    m_frame,
@@ -394,6 +504,7 @@ public class HomeGUI {
 			
 			m_btnRemove.setEnabled(false);
 			m_btnSendMsg.setEnabled(false);
+			m_btnDraw.setEnabled(false);
 		}
 		
 		
@@ -402,12 +513,51 @@ public class HomeGUI {
 	
 	public void refreshGUI() {
 		initializeData();
-		m_contactsList.setListData(m_contacts);
-		m_contactsList.setSelectedIndex(-1);
+		if(guiState == 0) {
+			
+		}else if(guiState == 1) {
+			m_leftJList.setListData(m_contacts);
+		}
+		
+		m_leftJList.setSelectedIndex(-1);
 		m_btnRequest.setText(m_noOfRequest + "");
 		if(m_noOfRequest == 0) {
 			m_btnRequest.setEnabled(false);
 		}
+	}
+	
+	public void switchState(int state) {
+		guiState = state;
+		m_leftJList.setSelectedIndex(-1);
+		
+		switch(guiState) {
+		case 0:
+			MainProgram.fetchRooms();
+			m_leftJList.setListData(m_rooms);
+			m_contactPanel.setVisible(false);
+			
+			break;
+			
+		case 1:
+			MainProgram.fetchContacts();
+			m_leftJList.setListData(m_contacts);
+			
+			break;
+			
+		default:
+			MainProgram.fetchRooms();
+			m_leftJList.setListData(m_rooms);
+			m_contactPanel.setVisible(false);
+			
+			break;
+			
+		}
+		
+		m_frame.setVisible(true);
+	}
+	
+	public void group() {
+		HomeGUI me = this;
 	}
 
 	/**
