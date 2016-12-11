@@ -30,7 +30,7 @@ public class Chat {
 	private int m_messageNumber = 0; // the message number
 	
 	//This is the default read amount of messages when load messages is called
-	//For more overlad the method with an int
+	//For more overload the method with an int
 	final int DEFAULT_READ_AMOUNT = 25; // this is the initial amount of messages that is read to the database
 
 	/**
@@ -81,7 +81,7 @@ public class Chat {
 	 * @param message THe text message with   ∞ amount of character set
 	 * @param sender The sender of mesage
 	 */
-	public void newTextMessage(String message, String sender){
+	public void newTextMessage(String message, Account sender){
 		Message load =  new TextMessage(message, sender);
 		this.m_listOfMessages.add(load);
 		this.saveChat(load);
@@ -94,7 +94,7 @@ public class Chat {
 	 * @param sender the name of the person who sent the message
 	 * @param time the time that the message was sent.
 	 */
-	public void newTextMessage(String message, String sender, String time){
+	public void newTextMessage(String message, Account sender, String time){
 		Message load =  new TextMessage(message, sender, time);
 		this.m_listOfMessages.add(load);
 		this.m_messageNumber ++;
@@ -111,7 +111,7 @@ public class Chat {
 	 * @throws Exception If message is too long Exception is thrown 
 	 * For more infomation - @See MediaMessage
 	 */
-	public void newMediaMessage(File message, String discription, String sender)
+	public void newMediaMessage(File message, String discription, Account sender)
 			throws Exception {
 		
 		Message load =  new MediaMessage(message,discription,sender);
@@ -138,7 +138,7 @@ public class Chat {
 	 * @throws Exception Exception If message is too long Excpetion is thrown  - @See MediaMessage
 	 */
 	public void newMediaMessage(File message, String discription, 
-			String sender,String Time)
+			Account sender,String Time)
 					throws Exception {
 		
 		try {

@@ -25,7 +25,7 @@ public class MediaMessage extends Message {
 	 * @param dateStamp The date of when message was sent
 	 * @throws Exception if message was longer than the set amount of characters a error is thrown.
 	 */
-	public MediaMessage(File message, String discription, String sender) throws Exception {
+	public MediaMessage(File message, String discription, Account sender) throws Exception {
 		super(sender, 'm');
 		this.m_file = message;
 		if ((discription.length()) >= this.DESCPITION_LENGHT){
@@ -35,7 +35,7 @@ public class MediaMessage extends Message {
 		//
 	}
 	
-	public MediaMessage(File message, String discription, String sender, String time) throws Exception {
+	public MediaMessage(File message, String discription, Account sender, String time) throws Exception {
 		super(sender,'m', time);
 		this.m_file = message;
 		if ((discription.length()) >= this.DESCPITION_LENGHT){
