@@ -97,12 +97,16 @@ public class SignupGUI extends GUI{
 				}
 
 				else {
-					
-					//write(new account(..))
+					if(new SignUp().validateSignup(uname)){
 					//new AccountReader().write(new Account(uname, pwrd, fname, lname, phonenum));
 					m_frmSignUp.dispose();
 					JOptionPane.showMessageDialog(null, "Account Created");
 					new LoginGUI().displayGUI();
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "That Username has already been taken");
+					}
+					
 				}
 						
 			}

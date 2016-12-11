@@ -1,4 +1,3 @@
-import java.awt.EventQueue;
 import java.awt.Image;
 
 import javax.swing.JFrame;
@@ -18,15 +17,14 @@ import javax.swing.ImageIcon;
 
 public class LoginGUI extends GUI{
 
-	private JFrame frmLogIn;
-	private JTextField usernametxtfld;
-	private JPasswordField passwordpwrdfld;
-	private JButton btnLogIn;
-	private JButton btnResetPassword;
-	private JButton btnSignUp;
-	private JLabel lblLogo;
-
-		
+	private JFrame m_frmLogIn;
+	private JTextField m_usernametxtfld;
+	private JPasswordField m_passwordpwrdfld;
+	private JButton m_btnLogIn;
+	private JButton m_btnResetPassword;
+	private JButton m_btnSignUp;
+	private JLabel m_lblLogo;	
+	
 	public LoginGUI() {
 		
 	}
@@ -36,60 +34,65 @@ public class LoginGUI extends GUI{
 	 * @wbp.parser.entryPoint
 	 */
 	protected void makeGUI() {
-		frmLogIn = new JFrame();
-		setVisible(frmLogIn, true);
-		frmLogIn.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\src\\Skypertawe Icon.png"));
-		frmLogIn.getContentPane().setBackground(new Color(0, 238, 190));
+		m_frmLogIn = new JFrame();
+		setVisible(m_frmLogIn, true);
+		m_frmLogIn.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\src\\Skypertawe Icon.png"));
+		m_frmLogIn.getContentPane().setBackground(new Color(0, 238, 190));
 		
 		JLabel lblUsername = new JLabel("Username");
 		
 		JLabel lblPassword = new JLabel("Password");
 		
-		usernametxtfld = new JTextField();
-		usernametxtfld.setColumns(10);
+		m_usernametxtfld = new JTextField();
+		m_usernametxtfld.setColumns(10);
 		
-		passwordpwrdfld = new JPasswordField();
+		m_passwordpwrdfld = new JPasswordField();
 		
-		btnLogIn = new JButton("Log In");
-		btnLogIn.addActionListener(new ActionListener() {
+		m_btnLogIn = new JButton("Log In");
+		m_btnLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String uname = usernametxtfld.getText();
-				String pass = passwordpwrdfld.getPassword().toString();
-				
-				if (){
+				String uname = m_usernametxtfld.getText();
+				String pass = m_passwordpwrdfld.getPassword().toString();
+								
+				if(uname.equals("") || m_passwordpwrdfld.getPassword().length == 0){
 					JOptionPane.showMessageDialog(null, "Please complete all fields");
 				}
 				else{
-					if(new AccountReader().checkUserPass(uname, pass)){
-						//homeGUI
-					}
-					else{
-						JOptionPane.showMessageDialog(null, "Incorrect Username/Password");
+					try {
+						if(new AccountReader().checkUserPass(uname, pass)){
+							//homeGUI
+							JOptionPane.showMessageDialog(null, "HomeGUI");
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Incorrect Username/Password");
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			}
 		});
 		
-		btnResetPassword = new JButton("Reset Password");
-		btnResetPassword.addActionListener(new ActionListener() {
+		m_btnResetPassword = new JButton("Reset Password");
+		m_btnResetPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frmLogIn.dispose();
+				m_frmLogIn.dispose();
 				new ResetPasswordGUI().displayGUI();
 			}
 		});
 		
-		btnSignUp = new JButton("Sign Up");
-		btnSignUp.addActionListener(new ActionListener() {
+		m_btnSignUp = new JButton("Sign Up");
+		m_btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frmLogIn.dispose();
+				m_frmLogIn.dispose();
 				new SignupGUI().displayGUI();
 			}
 		});
 		
-		lblLogo = new JLabel("");
-		Image logo = new ImageIcon(this.getClass().getResource("/ss.png")).getImage();
-		lblLogo.setIcon(new ImageIcon(logo));
-		GroupLayout groupLayout = new GroupLayout(frmLogIn.getContentPane());
+		m_lblLogo = new JLabel("");
+		Image logo = new ImageIcon(this.getClass().getResource("/Skypertawe Logo.png")).getImage();
+		m_lblLogo.setIcon(new ImageIcon(logo));
+		GroupLayout groupLayout = new GroupLayout(m_frmLogIn.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
@@ -97,49 +100,49 @@ public class LoginGUI extends GUI{
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(165)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnResetPassword)
-								.addComponent(btnLogIn)))
+								.addComponent(m_btnResetPassword)
+								.addComponent(m_btnLogIn)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(btnSignUp)
+							.addComponent(m_btnSignUp)
 							.addGap(42)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblLogo)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblPassword)
 									.addGap(18)
-									.addComponent(passwordpwrdfld, 86, 86, 86))
+									.addComponent(m_passwordpwrdfld, 86, 86, 86))
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblUsername)
 									.addGap(18)
-									.addComponent(usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap(78, Short.MAX_VALUE))
+									.addComponent(m_usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(m_lblLogo, GroupLayout.PREFERRED_SIZE, 241, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(72, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnSignUp)
-						.addComponent(lblLogo, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+						.addComponent(m_btnSignUp)
+						.addComponent(m_lblLogo, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
 					.addGap(11)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblUsername)
-						.addComponent(usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(m_usernametxtfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPassword)
-						.addComponent(passwordpwrdfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(m_passwordpwrdfld, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(btnLogIn)
+					.addComponent(m_btnLogIn)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnResetPassword)
+					.addComponent(m_btnResetPassword)
 					.addGap(26))
 		);
-		frmLogIn.getContentPane().setLayout(groupLayout);
-		frmLogIn.setTitle("Log in");
-		frmLogIn.setBounds(100, 100, 450, 300);
-		frmLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		m_frmLogIn.getContentPane().setLayout(groupLayout);
+		m_frmLogIn.setTitle("Log in");
+		m_frmLogIn.setBounds(100, 100, 450, 300);
+		m_frmLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static void main(String[] args) {
