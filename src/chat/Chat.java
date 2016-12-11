@@ -6,21 +6,38 @@ import java.util.LinkedList;
 
 import filereader.ChatReader;
 /**
- * This is the main class of CHat that contains the main logit of chat and contains
- * any interactation that the GUI would do with Chat
+ * This is the main class of CHat that contains the main logic of chat and contains
+ * any interaction that the GUI would do with Chat
  * @author Osian 
- * @date 10 12 16
+ * @date 11 12 16
  * @version 0.9
  *
  */
 public class Chat {
-	private String m_chatLocation;
+	// this stores the chat location
+	private String m_chatLocation; 
+	
+	// this stores the chatfacingDB 
 	private ChatReader chatDB;
+	
+	//This stores whether that the the users can talk 
 	private boolean m_canUsersTalk;
+	
+	//This stores the linked list of all messages that have been called
 	private LinkedList<Message> m_listOfMessages = new LinkedList<Message>();
+	
+	// this stores the message number
 	private int m_messageNumber = 0; // the message number
+	
+	//This is the default read amount of messages when load messages is called
+	//For more overlad the method with an int
 	final int DEFAULT_READ_AMOUNT = 25; // this is the initial amount of messages that is read to the database
 
+	/**
+	 * Constructor for chat 
+	 * @param chatLocation the chat location
+	 * @param isChatElegable  This states whether the chat is allowed
+	 */
 	public Chat(String chatLocation, boolean isChatElegable){
 		chatDB = new ChatReader(chatLocation);
 		this.m_canUsersTalk = isChatElegable;
@@ -28,21 +45,13 @@ public class Chat {
 	}
 
 	/**
-	 * This is the location of the chat
-	 * @returnlocation oif the chat
+	 * This returns what chat is being used on the database
+	 * @return The chat that is being stored on the database
 	 */
 	public String getChatLocation() {
 		return m_chatLocation;
 	}
 
-
-	/** 
-	 * This updates the chat location
-	 * @param chatLocation the chat location 
-	 */
-	//	public void setChatLocation(File chatLocation) {
-	//		this.m_chatLocation = chatLocation;
-	//	}
 	/**
 	 * This says wether chat is eligable or not between them
 	 * @return TRUE if eleigable false otherwise 
@@ -92,16 +101,19 @@ public class Chat {
 		
 	}
 	/**
-	 * This adds a new messsage to the linked list 
+	 * This adds a new message to the linked list 
 	 * No safety checks are done here so if a virus is passed it will be displayed to
 	 * the user
 	 * @param message the message as a file
 	 * @param discription The description of the message  (limited to a set 
 	 * amount of characters @See MediaMessage
 	 * @param sender The person who has sent the object
-	 * @throws Exception If message is too long Excpetion is thrown  - @See MediaMessage
+	 * @throws Exception If message is too long Exception is thrown 
+	 * For more infomation - @See MediaMessage
 	 */
-	public void newMediaMessage(File message, String discription, String sender) throws Exception {
+	public void newMediaMessage(File message, String discription, String sender)
+			throws Exception {
+		
 		Message load =  new MediaMessage(message,discription,sender);
 		try {
 			
@@ -125,8 +137,12 @@ public class Chat {
 	 * @param Time The time of the message as a String 
 	 * @throws Exception Exception If message is too long Excpetion is thrown  - @See MediaMessage
 	 */
-	public void newMediaMessage(File message, String discription, String sender,String Time) throws Exception {
+	public void newMediaMessage(File message, String discription, 
+			String sender,String Time)
+					throws Exception {
+		
 		try {
+			
 			Message load =  new MediaMessage(message,discription,sender,Time);
 			this.m_listOfMessages.add(load);
 		} catch (Exception e) {
@@ -199,21 +215,28 @@ public class Chat {
 		try {
 			this.chatDB.wrie(chat);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	/**
 	 * This method loads in the chat from memory from a specific file of the default amount
-	 * @param Chat The File that contains the chat itself 
+	 * @param Chat The name of the chat that wants to be loaded 
 	 * @throws FileNotFoundException  If file is not found this error is thrown
 	 */
 	public void loadChat(String Chat) throws FileNotFoundException{
 		this.loadChat(Chat, this.DEFAULT_READ_AMOUNT);
 	}
 	
-	public void loadChat(String Chat, int amountOfMessages) throws FileNotFoundException{
+	/**
+	 * This loads the chat in from the database.
+	 * @param Chat The name of the chat that wants to be loaded
+	 * @param amountOfMessages the amount of messages that want to be loaded
+	 * @throws FileNotFoundException this is thronw if something is wrong with loading
+	 */
+	public void loadChat(String Chat, int amountOfMessages) 
+			throws FileNotFoundException{
+		
 		this.m_listOfMessages = null; // makes sure that the chat is cleared
 		ChatReader chat = new ChatReader(m_chatLocation);
 		
