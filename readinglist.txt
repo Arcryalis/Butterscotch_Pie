@@ -1,5 +1,0 @@
-Books that we have used (worth 1%):
-
-C. Horstmann, Java for Everyone, Wiley, 2010
-C. J. Date, An Introduction to Database Systems, 8th Edition, Addison-Wesley, 2003.
-A. Beaulieu, Learning SQL, 2nd Edition, O’Reilly, 2009.
