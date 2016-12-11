@@ -19,8 +19,7 @@ public class RoomReader extends FileReader {
 
 	//Constructor
 	/**
-	 * Creates a RoomReader.
-	 */
+	 * Creates a RoomReader.	 */
 	public RoomReader() {
 		super(FILEPATH);
 	}
@@ -45,7 +44,7 @@ public class RoomReader extends FileReader {
 			ResultSet result = statement.executeQuery(query);  
 			
 			while(result.next() == true){
-				roomList.add(result.getString(MEMBERS_ROOM_NAME));
+				roomList.add(result.getString(USER_NAME));
 			}
 			
 		}catch(SQLException e){ 
