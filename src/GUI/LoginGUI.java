@@ -20,6 +20,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
+/**
+ * LoginGUI.java
+ * @author Ahmed Elmi
+ */
 public class LoginGUI extends GUI{
 
 	private JFrame m_frmLogIn;
@@ -35,8 +39,8 @@ public class LoginGUI extends GUI{
 	}
 
 	
-	/**
-	 * @wbp.parser.entryPoint
+	/*
+	 * Implements the LoginGUI
 	 */
 	protected void makeGUI() {
 		m_frmLogIn = new JFrame();
@@ -53,6 +57,9 @@ public class LoginGUI extends GUI{
 		
 		m_passwordpwrdfld = new JPasswordField();
 		
+		/*
+		 * Log in button performs the calls the login method if username and password are correct
+		 */
 		m_btnLogIn = new JButton("Log In");
 		m_btnLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -80,7 +87,9 @@ public class LoginGUI extends GUI{
 				}
 			}
 		});
-		
+		/*
+		 * Reset Password button takes user to the ResetPaswordGUI
+		 */
 		m_btnResetPassword = new JButton("Reset Password");
 		m_btnResetPassword.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,7 +97,9 @@ public class LoginGUI extends GUI{
 				new ResetPasswordGUI().displayGUI();
 			}
 		});
-		
+		/*
+		 * Signup button takes the user to the SignupGUI
+		 */
 		m_btnSignUp = new JButton("Sign Up");
 		m_btnSignUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -100,6 +111,9 @@ public class LoginGUI extends GUI{
 		m_lblLogo = new JLabel("");
 		Image logo = new ImageIcon(this.getClass().getResource("/res/skypertawelogo.png")).getImage();
 		m_lblLogo.setIcon(new ImageIcon(logo));
+		/*
+		 * GroupLayout for GUI contents
+		 */
 		GroupLayout groupLayout = new GroupLayout(m_frmLogIn.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -152,7 +166,9 @@ public class LoginGUI extends GUI{
 		m_frmLogIn.setBounds(100, 100, 450, 300);
 		m_frmLogIn.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+	/*
+	 * login method that connects to HomeGUI
+	 */
 	public void login() {
 		try{
 			MainProgram.setM_ac(new AccountReader().getAccount(m_usernametxtfld.getText()));
@@ -174,8 +190,11 @@ public class LoginGUI extends GUI{
 		m_frmLogIn.dispose();
 	}
 	
-	public static void main(String[] args) {
+	/*
+	 * main method for testing purposes
+	 */
+	/*public static void main(String[] args) {
 		new LoginGUI().displayGUI();
-	}
+	}*/
 
 }
