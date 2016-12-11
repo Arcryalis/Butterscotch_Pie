@@ -315,8 +315,8 @@ public class RoomReader extends FileReader {
 	/** Query used for the getRoomsType() operation */
 	private static final String ROOM_TYPE_QUERY = 	"select " + ROOM_TYPE + " " +
 													"from room " +
-													"where " + ROOM_NAME +  "= %s;";
-	
+													"where " + ROOM_NAME +  "= '%s';";
+
 	
 	/** Query used for the newRoom() operation */
 	private static final String NEW_ROOM_QUERY = 	"insert into room " +
