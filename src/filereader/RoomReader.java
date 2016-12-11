@@ -28,9 +28,9 @@ public class RoomReader extends FileReader {
 	
 	//Public methods
 	/**
-	 * Searches the roommembers table for rooms an input user is part of.
-	 * @param username The user being searched for
-	 * @return A list of room names that the user is part of
+	 * Searches the roommembers table for a members that are part of a room
+	 * @param roomName The room being searched for
+	 * @return A list of user names that are part of the room
 	 * @throws Exception
 	 */
 	public LinkedList<String> getRoomMemebers(String roomName) throws Exception {
@@ -230,6 +230,34 @@ public class RoomReader extends FileReader {
 				
 	}
 	
+	/**
+	 * Get the type of the room
+	 * @param roomName The room to check
+	 * @return A string representing the room as either a chat or drawing environment
+	 * @throws Exception
+	 */
+	public String getRoomType(String roomName) throws Exception {
+
+		String query = String.format(ROOM_TYPE_QUERY, roomName);
+			
+		try{
+			openSQL();
+			Statement statement = m_connection.createStatement();  
+			ResultSet result = statement.executeQuery(query);  
+			
+			result.next();
+			return result.getString(ROOM_TYPE);
+			
+		}catch(SQLException e){ 
+			throw new SQLException(SQL_ERROR + e);
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			closeSQL();
+		}	
+
+	}
+	
 	//Private methods
 	/**
 	 * Deletes a room.
@@ -285,6 +313,12 @@ public class RoomReader extends FileReader {
 	private static final String ROOMS_MEMEBER_OF_QUERY = 	"select distinct " + MEMBERS_ROOM_NAME + " " +
 															"from roommembers " +
 															"where " + USER_NAME + " = '%s';";
+	/** Query used for the getRoomsType() operation */
+	private static final String ROOM_TYPE_QUERY = 	"select " + ROOM_TYPE + " " +
+													"from room " +
+													"where " + ROOM_NAME +  "= %s;";
+	
+	
 	/** Query used for the newRoom() operation */
 	private static final String NEW_ROOM_QUERY = 	"insert into room " +
 													"values ('%s', '%s');";
@@ -302,6 +336,7 @@ public class RoomReader extends FileReader {
 														+ USER_NAME + " = '%s';";
 	/** Query used for removing a user in the removeRoomMember() operation */
 	private static final String DELETE_ROOM_QUERY = 	"drop table %s;";
+	
 	
 	
 }
