@@ -17,11 +17,11 @@ public class TextMessage extends Message {
 	 * @param timeStamp timestamp of the message
 	 * @param Datestamp the date of the message 
 	 */
-	public TextMessage(String message,Account sender){
+	public TextMessage(String message,String sender){
 		super(sender,'t');
 		this.m_message = message;
 	}
-	public TextMessage(String message, Account sender, String time) {
+	public TextMessage(String message, String sender, String time) {
 		super(sender, 't', time);
 		this.m_message = message;
 	}

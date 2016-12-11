@@ -7,13 +7,13 @@ import java.util.Date;
  * This is a message object  that contains general information about a message
  * @author Osian
  * @date 11/12/16
- * @version 0.9
+ * @version 0.8
  *
  */
 public abstract class Message {
 	//THe variable that converts the 
 	protected String m_time; // stores the time that the message was saved
-	protected Account m_sender; // stores the sender
+	protected String m_sender; // stores the sender
 	protected char m_messageType; //stores the message type
 	protected int m_messageNo; // stores the message number
 
@@ -27,7 +27,7 @@ public abstract class Message {
 	 * to the user.
 	 * @param sender THe person who sent the message
 	 */
-	public Message(Account sender, char messageType){
+	public Message(String sender, char messageType){
 		 SimpleDateFormat dateStamp = 
 				 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		 // Gets time from system
@@ -43,7 +43,7 @@ public abstract class Message {
 	 * @param sender The sender of the message
 	 * @param time Time as String of the message
 	 */
-	public Message(Account sender,char messageType, String time){
+	public Message(String sender,char messageType, String time){
 		this.m_time = time;
 		this.m_messageType = messageType;
 		this.m_sender = sender;
@@ -64,7 +64,7 @@ public abstract class Message {
 	 * This returns the sender of the message
 	 * @return sender of the chat
 	 */
-	public Account getSender() {
+	public String getSender() {
 		return m_sender;
 	}
 	
