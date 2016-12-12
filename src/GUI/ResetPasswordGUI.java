@@ -1,8 +1,10 @@
 
 import java.awt.Image;
-
+import filereader.AccountReader;
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.HeadlessException;
+
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
@@ -66,29 +68,36 @@ public class ResetPasswordGUI extends GUI {
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String uname = unametxtfld.getText();
-				String opass = opwrdfld.getPassword().toString();
+				String opass = String.valueOf(opwrdfld.getPassword());
+						
 				// error
 				if (uname.equals("") || opwrdfld.getPassword().length == 0 || pwrdfld.getPassword().length == 0
 						|| pwrdfld2.getPassword().length == 0) {
 					JOptionPane.showMessageDialog(null, "Please complete all fields");
 				} else {
-					if (new AccountReader.checkUserPass(uname, opass){
-						// query to change password in db
-						if (pwrdfld.getPassword().equals(pwrdfld2.getPassword())) {
-							JOptionPane.showMessageDialog(null, "Password Changed");
-						} else {
-							JOptionPane.showMessageDialog(null, "Passwords don't match");
-						}
+					try {
+						if (uname.equals(opass)/*new AccountReader().checkUserPass(uname, opass)*/){
+							// query to change password in db
+							if (String.valueOf(pwrdfld.getPassword()).equals(String.valueOf(pwrdfld2.getPassword()))) {
+								JOptionPane.showMessageDialog(null, "Password Changed");
+							} else {
+								JOptionPane.showMessageDialog(null, "Passwords don't match");
+							}
 
-					} else {
-						JOptionPane.showMessageDialog(null, "Username and/or password is incorrect");
+						} else {
+							JOptionPane.showMessageDialog(null, "Username and/or password is incorrect");
+						}
+					} catch (HeadlessException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			}
 		});
 					
 		/*
-		 * Cancel button eturns the user to the loginGUI
+		 * Cancel button returns the user to the loginGUI
 		 */
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
@@ -104,7 +113,7 @@ public class ResetPasswordGUI extends GUI {
 		opwrdfld = new JPasswordField();
 
 		JLabel lblLogo = new JLabel("");
-		Image logo = new ImageIcon(this.getClass().getResource("/Skypertawe Logo.png")).getImage();
+		Image logo = new ImageIcon(this.getClass().getResource("/sss.png")).getImage();
 		lblLogo.setIcon(new ImageIcon(logo));
 		
 		/*
@@ -183,7 +192,7 @@ public class ResetPasswordGUI extends GUI {
 	/*
 	 * main method used for testing
 	 */
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		new ResetPasswordGUI().displayGUI();
-	}*/
+	}
 }

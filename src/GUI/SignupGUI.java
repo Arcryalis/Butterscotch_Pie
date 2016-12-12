@@ -105,7 +105,11 @@ public class SignupGUI extends GUI {
 
 				else {
 					if (new SignUp().validateSignup(uname)) {
-						new AccountReader().write(new Account(uname, m_pwrdfld.getPassword().toString(),fname, lname, phonenum));
+						try {
+							new AccountReader().write(new Account(uname, m_pwrdfld.getPassword().toString(),fname, lname, phonenum));
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 						m_frmSignUp.dispose();
 						JOptionPane.showMessageDialog(null, "Account Created");
 						new LoginGUI().displayGUI();
