@@ -42,7 +42,7 @@ public class ResetPasswordGUI extends GUI {
 	protected void makeGUI() {
 		frmResetPassword = new JFrame();
 		frmResetPassword.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				"C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\src\\Skypertawe Icon.png"));
+				"/Skypertawe Icon.png"));
 		setVisible(frmResetPassword, true);
 		frmResetPassword.setTitle("Reset Password");
 		frmResetPassword.getContentPane().setBackground(new Color(0, 238, 190));
@@ -76,9 +76,12 @@ public class ResetPasswordGUI extends GUI {
 					JOptionPane.showMessageDialog(null, "Please complete all fields");
 				} else {
 					try {
-						if (uname.equals(opass)/*new AccountReader().checkUserPass(uname, opass)*/){
+						if (new AccountReader().checkUserPass(uname, opass)){
 							// query to change password in db
 							if (String.valueOf(pwrdfld.getPassword()).equals(String.valueOf(pwrdfld2.getPassword()))) {
+								Account updatedAccount = new AccountReader().getAccount(uname);
+								updatedAccount.setPassword(String.valueOf(pwrdfld2.getPassword()));
+								new AccountReader().update(updatedAccount);
 								JOptionPane.showMessageDialog(null, "Password Changed");
 							} else {
 								JOptionPane.showMessageDialog(null, "Passwords don't match");
