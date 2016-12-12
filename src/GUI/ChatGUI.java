@@ -8,6 +8,9 @@ import javax.swing.JTextArea;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+
+import chat.Chat;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -24,8 +27,8 @@ public class ChatGUI extends GUI {
 
 	private JFrame m_frmChat;
 	private JTextField m_messagetxtfld;
-	private JTextArea textArea;
-
+	private JTextArea m_textArea;
+	private Chat m_chatObject;
 	public ChatGUI() {
 
 	}
@@ -50,6 +53,9 @@ public class ChatGUI extends GUI {
 		m_messagetxtfld = new JTextField();
 		m_messagetxtfld.setColumns(10);
 		
+		String chatlocation = "hi";
+		boolean isChatEliable = true;
+		m_chatObject = new Chat(chatlocation,isChatEliable);
 		/*
 		 * Send button takes string from textfield and appends it to the text area
 		 */
@@ -60,23 +66,24 @@ public class ChatGUI extends GUI {
 				if (m_messagetxtfld.getText().equals(nothing)) {
 					return;
 				} else {
-					textArea.append(/* getusername */ m_messagetxtfld.getText() + System.lineSeparator());
+					m_textArea.append(MainProgram.getM_ac().getUsername() + ": " + m_messagetxtfld.getText() + System.lineSeparator());
 					m_messagetxtfld.setText("");
+					//this.m_chatObject.newTextMessage( m_messagetxtfld.getText(), /*getusername*/);
 				}
 			}
 		});
 
-		textArea = new JTextArea();
-		textArea.setSize(320, 120);
-		textArea.setBackground(new Color(240, 255, 240));
-		textArea.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
-		textArea.setLineWrap(true);
-		textArea.setEditable(false);
+		m_textArea = new JTextArea();
+		m_textArea.setSize(320, 120);
+		m_textArea.setBackground(new Color(240, 255, 240));
+		m_textArea.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
+		m_textArea.setLineWrap(true);
+		m_textArea.setEditable(false);
 
 		JScrollPane scrollBar = new JScrollPane();
 		scrollBar.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollBar.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollBar.setRowHeaderView(textArea);
+		scrollBar.setRowHeaderView(m_textArea);
 
 		m_frmChat.getContentPane().add(scrollBar);
 		
@@ -103,7 +110,7 @@ public class ChatGUI extends GUI {
 	/*
 	 * main method for testing purposes
 	 */
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		new ChatGUI().displayGUI();
-	}*/
+	}
 }
