@@ -1,3 +1,4 @@
+
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -13,13 +14,17 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import filereader.AccountReader;
+import filereader.ContactsReader;
 
 import java.awt.Color;
+import java.awt.Component;
 
 /**
  * SearchGUI.java
  * @author Yiu Ting Lai
  * @author Osian Smith 
+ * @author Ahmed Elmi
  * @version .5
  * NOT FUNCIONAL YET!!!!!!
  */
@@ -27,15 +32,12 @@ import java.awt.Color;
 public class NewGroupGUI {
 	
 	private JFrame m_frame;
-	private JLabel m_lblBottomBG;
 	private JTextField txtSearch;
 	private JButton btnSearch;
 	private JScrollPane m_usersPane;
 	private JList m_usersList;
 	private JLabel m_lblImgProf;
-	private JButton m_btnAdd;
 	private JButton m_btnCanncel;
-	private JButton m_Go;
 	private ActionListener m_searchAction;
 	private ActionListener m_addAction;
 	private ActionListener m_Canncel;
@@ -43,7 +45,11 @@ public class NewGroupGUI {
 	
 	private String m_account;
 	private String[] m_users;
+	private JButton m_btnAdd;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
 	
+	private LinkedList<String> m_group = new LinkedList<String>();
 	
 	/**
 	 * Launch the application.
@@ -91,14 +97,25 @@ public class NewGroupGUI {
 	}
 	
 	private void initializeMainGUI() {
-		m_lblBottomBG = new JLabel("");
-		m_lblBottomBG.setBackground(new Color(255, 255, 255));
-		m_lblBottomBG.setBounds(0, 0, 500, 375);
-		m_lblBottomBG.setIcon(new ImageIcon("res/searchBG.png"));
+		txtSearch = new JTextField();
+		txtSearch.setBounds(5, 6, 200, 30);
+		txtSearch.setColumns(10);
 		
+		String txt = txtSearch.getText();
 		m_searchAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
+				try {
+					try {
+						//LinkedList<String> list = new ContactsReader().getContactsOf(MainProgram.getM_ac().getUsername());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				// Call to RequestGUI.accept for accept request
 				System.out.println("m_addAction: Clicked on: accept button");
 				search();
@@ -106,15 +123,13 @@ public class NewGroupGUI {
 		};
 		
 		btnSearch = new JButton("Search");
-		btnSearch.setBounds(205, 8, 75, 29);
+		btnSearch.setBounds(225, 7, 75, 29);
 		btnSearch.addActionListener(m_searchAction);
 		
-		txtSearch = new JTextField();
-		txtSearch.setBounds(5, 6, 200, 30);
-		txtSearch.setColumns(10);
+		
 		
 		m_lblImgProf = new JLabel();
-		m_lblImgProf.setBounds(245, 40, 250, 250);
+		m_lblImgProf.setBounds(222, 47, 235, 233);
 		
 		m_addAction = new ActionListener() {
 			public void actionPerformed(ActionEvent e)
@@ -124,25 +139,16 @@ public class NewGroupGUI {
 				sendRequest();
 			}
 		};
-		//creates a add button
-		m_btnAdd = new JButton("Add");
-		m_btnAdd.setIcon(new ImageIcon("res/add.png"));
-		m_btnAdd.setBounds(395, 330, 90, 45);
-		m_btnAdd.addActionListener(m_addAction);
-		m_btnAdd.setEnabled(false);
 		
 		
 		//creates canncel button
-		this.m_btnCanncel = new JButton("Cancel");
-		this.m_btnCanncel.setBounds(300, 330, 90, 45);
-		this.m_btnCanncel.addActionListener(m_addAction);
+		this.m_btnCanncel = new JButton("WhiteBoard");
+		m_btnCanncel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		this.m_btnCanncel.setBounds(300, 293, 89, 45);
 		this.m_btnCanncel.setEnabled(true);
-		
-		// creates start button
-		this.m_Go = new JButton("Start Chat");
-		this.m_Go.setBounds(210, 330, 90, 45);
-		this.m_Go.addActionListener(m_addAction);
-		this.m_Go.setEnabled(false);
 		
 		
 		m_addMouse = new MouseAdapter() {
@@ -170,19 +176,21 @@ public class NewGroupGUI {
 		m_usersPane = new JScrollPane(m_usersList);
 		m_usersPane.setBounds(5, 40, 200, 335);
 		
-		m_btnAdd.addMouseListener(m_addMouse);
-		m_btnCanncel.addMouseListener(m_addMouse);
-		m_Go.addMouseListener(m_addMouse);
 		
 		m_frame.getContentPane().add(txtSearch);
 		m_frame.getContentPane().add(btnSearch);
 		m_frame.getContentPane().add(m_usersPane);
 		m_frame.getContentPane().add(m_lblImgProf);
-		m_frame.getContentPane().add(m_btnAdd);
-		m_frame.getContentPane().add(m_lblBottomBG);
 		m_frame.getContentPane().add(m_btnCanncel);
-		m_frame.getContentPane().add(m_Go);
 		
+		btnNewButton = new JButton("Send");
+		btnNewButton.setBounds(399, 296, 75, 39);
+		m_frame.getContentPane().add(btnNewButton);
+		
+		btnNewButton_1 = new JButton("Add");
+		btnNewButton_1.setBounds(211, 293, 80, 45);
+		m_frame.getContentPane().add(btnNewButton_1);
+		m_btnCanncel.addMouseListener(m_addMouse);
 		m_frame.setVisible(true);
 		
 	}
@@ -229,6 +237,14 @@ public class NewGroupGUI {
 		return true;
 	}
 	
+	public void addUser(String user){
+		try{
+			this.m_group = (new ContactsReader().getContactsOf(user));
+		}catch(Exception e)  {
+			
+		}
+	}
+
 	public boolean showUser(int index) {
 		m_btnAdd.setEnabled(true);
 		
