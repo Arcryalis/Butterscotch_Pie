@@ -31,16 +31,19 @@ public class ChatGUI extends GUI {
 	}
 
 	//Implementing the ChatGUI
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	protected void makeGUI() {
 		m_frmChat = new JFrame();
 		/*
 		 * Setting an icon for the frame
 		 */
 		m_frmChat.setIconImage(Toolkit.getDefaultToolkit().getImage(
-				"C:\\Users\\Admin\\Documents\\UNI\\Computer Science\\Java Workspace\\A3\\img\\Skypertawe Icon.png"));
+				"/Skypertawe Icon.png"));
 		m_frmChat.setTitle("Chat");
 		m_frmChat.getContentPane().setBackground(new Color(0, 238, 190));
-		m_frmChat.setBounds(100, 100, 450, 249);
+		m_frmChat.setBounds(100, 100, 450, 250);
 		m_frmChat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(m_frmChat, true);
 
